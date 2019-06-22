@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>结账退房</title>
+    <link href="../../css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="../../css/select.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript" src="../../js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="../../js/select-ui.min.js"></script>
+    <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="text/javascript">
+        var val;
+        var roomNumber=0;
+        //得到当前时间
+        function getNowFormatDate() {
+            var date = new Date();
+            var seperator1 = "-";
+            var seperator2 = ":";
+            var month = date.getMonth() + 1;
+            var strDate = date.getDate();
+            var strMinutes = date.getMinutes();
+            var strHour = date.getHours();
+            var strSecond = date.getSeconds();
+            if (month >= 1 && month <= 9) {
+                month = "0" + month;
+            }
+            if (strDate >= 0 && strDate <= 9) {
+                strDate = "0" + strDate;
+            }
+            if (strHour >= 0 && strHour <= 9) {
+                strHour = "0" + strHour;
+            }
+            if (strSecond >= 0 && strSecond <= 9) {
+                strSecond = "0" + strSecond;
+            }
+            if (strMinutes >= 0 && strMinutes <= 9) {
+                strMinutes = "0" + strMinutes;
+            }
+            var currentdate = date.getFullYear() + seperator1 + month + seperator1 + strDate
+                + " " + strHour + seperator2 + strMinutes
+                + seperator2 + strSecond;
+            return currentdate;
+        }
+
+        function checkouttime() {
+            $("#out").val(getNowFormatDate());
+        }
+
+        function selectChange(obj) {
+             roomNumber = $(obj).val();
+            for (var i = 0; i < val.length; i++) {
+                if (val[i].roomNumber == roomNumber) {
+                    $("#name").val(val[i].userName);
+                    $("#price").val(val[i].room.price);
+                    $("#yajin").val(val[i].room.deposit);
+                    $("#date1").val(val[i].checkInTime);
+                }
+            }
+
+        }
+
+
+        function toPay() {
+            alert(roomNumber);
+            var reg = /^\d+$/;
+            var $qi = $("#qita").val();
+            if (roomNumber==0 || !reg.test($qi)) {
+                alert("请正确填写信息");
+            } else {
+                localStorage.setItem('roomNumber',roomNumber);
+                localStorage.setItem('name', $("#name").val());
+                localStorage.setItem('yajin', $("#yajin").val());
+                localStorage.setItem('checkouttime', $("#out").val());
+                window.location = "pay2.html";
+            }
+        }
+
+
+        $(document).ready(function (e) {
+            $(".select1").uedSelect({
+                width: 345
+            });
+           // alert(document.referrer);
+
+            var headOption = "";
+            $.ajax({
+                url: "../../check/getAllCheck",
+                type: "POST",
+                success: function (data) {
+                    for (var i = 0; i < data.data.length; i++) {
+                        val = data.data;
+                        headOption += "<option value='" + data.data[i].roomNumber + "'>" + data.data[i].roomNumber + "</option>";
+                    }
+                    var option = "<option value='0' selected='selected'>请选择房间</option>" + headOption;
+                    $("#roomnumber").html(option);
+
+                    //如何是billinfo.html页面跳转的
+                    if (document.referrer=="http://localhost:8080/hotel/ui/bill/billinfo.html") {
+                        roomNumber=localStorage.getItem('billroomNumber');
+                        alert(localStorage.getItem('billroomNumber'));
+                         $("#div1").html("<input readonly='readonly'  id='roomnumber' class='dfinput'  style='width:344px;' value='"+localStorage.getItem('billroomNumber')+"'/>");
+                        for (var i = 0; i < val.length; i++) {
+                            if (val[i].roomNumber == roomNumber) {
+                                $("#name").val(val[i].userName);
+                                $("#price").val(val[i].room.price);
+                                $("#yajin").val(val[i].room.deposit);
+                                $("#date1").val(val[i].checkInTime);
+                            }
+                        }
+
+                    }
+                }
+            })
+
+            checkouttime();
+            //时间自动变化
+            window.setInterval("checkouttime()", 1000);
+
+        });
+
+
+    </script>
+</head>
+
+<body>
+<div class="place"><span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">入住信息管理</a></li>
+        <li><a href="#">结账退房</a></li>
+    </ul>
+</div>
+<div class="formbody">
+    <div class="formtitle"><span>消费信息</span></div>
+    <div id="usual1" class="usual">
+        <div id="tab1" class="tabson">
+            <form action="checkoutroom.s" method="post" id="form1">
+                <ul class="forminfo">
+                    <li>
+                        <label>房间号<b>*</b></label>
+                        <div class="vocation" id="div1">
+                            <select class="select1" id="roomnumber" name="roomnumber" onchange="selectChange(this)">
+                                <option value='0' selected='selected'>请选择房间</option>
+                            </select>
+                        </div>
+                    </li>
+                    <li style="margin-top:20px;">
+                        <label for="name">客人姓名<b>*</b></label>
+                        <div class="vocation">
+                            <input readonly="readonly" name="name" id="name" type="text" class="dfinput"
+                                   style="width:344px;"/>
+                        </div>
+                    </li>
+                    <br/> <br/>
+                    <li>
+                        <label for="price" style="cursor:pointer">单价<b>*</b></label>
+                        <div class="vocation">
+                            <input readonly="readonly" name="price" id="price" class="dfinput" value=""
+                                   style="width:344px;"/>
+                        </div>
+                    </li>
+                    <br/>
+                    <li>
+                        <label for="yajin" style="cursor:pointer">押金<b>*</b></label>
+                        <div class="vocation">
+                            <input readonly="readonly" name="yajin" id="yajin" type="text" class="dfinput"
+                                   style="width:344px;"/>
+                        </div>
+                    </li>
+                    <br/>
+                    <li>
+                        <label for="qita" style="cursor:pointer">其他消费<b>*</b></label>
+                        <div class="vocation">
+                            <input name="qita" id="qita" type="text" class="dfinput" value="0" style="width:344px;"/>
+                        </div>
+                    </li>
+                    <br/>
+                    <li>
+                        <label for="date1" style="cursor:pointer">入住时间<b>*</b></label>
+                        <div class="vocation">
+                            <input readonly="readonly" name="date1" id="date1" class="dfinput" value=""
+                                   style="width:344px;"/>
+                        </div>
+                    </li>
+                    <br/>
+                    <li>
+                        <label style="cursor:pointer">退房时间<b>*</b></label>
+                        <div class="vocation">
+                            <input type="text" name="date2" class="dfinput" id="out" style="width:344px;"/>
+                        </div>
+                        <br/>
+                    </li>
+                    <li>
+                        <label>&nbsp;</label>
+                        <input name="" type="button" class="btn" value="提交" onclick="toPay()"/>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>

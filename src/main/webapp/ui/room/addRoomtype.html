@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>酒店管理系统主页</title>
+
+    <link rel="stylesheet" href="../../css/select.css" type="text/css"></link>
+    <link rel="stylesheet" href="../../css/style.css" type="text/css"></link>
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+    <!--<script>
+        function dump() {
+            window.location=SelectRoomtype.html;
+        }
+    </script>-->
+</head>
+
+<body>
+<div class="place"><span>位置：</span>
+    <ul class="placeul">
+        <li><a href="main.html">首页</a></li>
+        <li><a href="#">客房信息管理</a></li>
+        <li><a href="#">添加客房</a></li>
+    </ul>
+</div>
+<div class="formbody">
+    <div class="formtitle"><span>添加房间类型</span></div>
+    <div id="usual1" class="usual">
+        <div id="tab1" class="tabson">
+
+
+
+                <ul class="forminfo">
+                    <li>
+                        <label>房间类型编号<b>*</b></label>
+                        <div class="vocation">
+                            <input type="text" name="rid" id="rid"  class="dfinput" placeholder="输入房间类型编号"  style="width:344px;"/>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </div>
+                    </li>
+                    <li>
+                        <label>客房类型<b>*</b></label>
+                        <div class="vocation">
+                            <input type="text" name="type" id="type"  class="dfinput" placeholder="输入房间类型，如单人间"  style="width:344px;"/>
+                            <br/>
+                            <br/>
+                            <br/>
+                        </div>
+                    </li>
+
+
+                    <li>
+                        <label>&nbsp;</label>
+                        <input name="" type="button" class="btn" value="添加" onclick="add()"/>
+                    </li>
+
+                </ul>
+            <script type="text/javascript">
+                function add() {
+                    alert("进入add");
+                    var rid= $("#rid").val();
+                    var type = $("#type").val();
+                    alert(rid+type);
+                    $.ajax({
+                        url: "../../roomtype/insertRT",
+                        type: "POST",
+                        data: {
+                            rid:rid,
+                            type: type
+                        },
+                        success: function (data, status) {
+                            if (status == "success") {
+                                alert(111);
+                                console.log('请求成功');
+                                console.log(data);
+                                if (data.state == 0) {
+                                    window.location = "SelectRoomtype.html";
+                                } else {
+                                    alert("添加失败")
+                                }
+
+                            }
+                        }
+                    });
+                }
+            </script>
+        </div>
+    </div>
+</div>
+
+
+</body>
+</html>

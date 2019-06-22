@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>无标题文档</title>
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/font-awesome-4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" type="text/css"
+          href="../../bootstrap/frame/bootstrap-table-master/src/bootstrap-table.css">
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap-fileinput-master/css/fileinput.css">
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap2/css/bootstrap.min.css">
+
+    <!-- <link href="../../css/style.css" rel="stylesheet" type="text/css" />-->
+    <script src="../../bootstrap/frame/jquery/jquery-3.3.1.js"></script>
+    <script src="../../bootstrap/frame/layer/layer.js"></script>
+    <script src="../../bootstrap/frame/bootstrap-table-master/src/bootstrap-table.js"></script>
+    <script src="../../bootstrap/frame/bootstrap-table-master/src/locale/bootstrap-table-zh-CN.js"></script>
+    <script src="../../bootstrap/frame/bootstrap2/js/bootstrap.min.js"></script>
+
+
+    <style>
+        * {
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: '微软雅黑';
+            margin: 0 auto;
+            min-width: 980px;
+        }
+
+        ul {
+            display: block;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        li {
+            display: block;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .place {
+            height: 40px;
+            background: url(../../images/righttop.gif) repeat-x;
+        }
+
+        .place span {
+            line-height: 40px;
+            font-weight: bold;
+            float: left;
+            margin-left: 12px;
+            color: #dc4e00;
+        }
+
+        .placeul li {
+            float: left;
+            line-height: 40px;
+            padding-left: 7px;
+            padding-right: 12px;
+            background: url(../../images/rlist.gif) no-repeat right;
+        }
+
+        .placeul li:last-child {
+            background: none;
+        }
+
+        .rightinfo {
+            padding: 8px;
+        }
+
+        .tools {
+            clear: both;
+            margin-bottom: 8px;
+        }
+
+        .toolbar1 table {
+            width: 850px;
+        }
+
+        .toolbar1 tr {
+            border: solid 1px #dca571;
+            border-radius: 3px;
+        }
+
+        .toolbar1 tr input, select {
+            margin-left: 10px;
+            height: 20px;
+            border: solid 1px #d7a372;
+            border-radius: 3px;
+            font-family: "微软雅黑";
+        }
+
+        .toolbar1 tr .button {
+            width: 60px;
+            background: url(../../images/toolbg.gif) repeat-x;
+            border-radius: 3px;
+        }
+
+        .toolbar1 tr .zi {
+            background: url(../../images/toolbg.gif) repeat-x;
+            line-height: 33px;
+            height: 33px;
+            text-align: center;
+        }
+    </style>
+
+
+</head>
+
+<body>
+<div class="place"><span>位置：</span>
+    <ul class="placeul">
+        <li><a href="main.html">首页</a></li>
+        <li><a href="#">入住管理</a></li>
+        <li><a href="#">查询订单</a></li>
+    </ul>
+</div>
+<center>
+    <div class="rightinfo">
+        <div class="tools">
+            <div class="toolbar1">
+                <table>
+
+                    <tr>
+                        <td class="zi"><span>房间类型：</span></td>
+                        <td id="p">
+                            <!--下拉框-->
+                        </td>
+                        <td class="zi"><span>客人身份证：</span></td>
+                        <td><input type="text" placeholder="客人身份证" id="idcard"/></td>
+                        <td><input type="button" value="查询" class="button" id="sub"/></td>
+                    </tr>
+
+                </table>
+            </div>
+        </div>
+    </div>
+</center>
+<div>
+    <div id="toolbar" class="btn-group">
+        <button id="btn" type="button" class="btn btn-warning" onclick="exportExcel()">
+            <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>导出表格
+        </button>
+    </div>
+    <table id="page"></table>
+    <script>
+        $(function () {
+            //生成表格
+            initTable('http://localhost:8080/hotel/bill/getBill', 1, 3);//调用函数，初始化表格
+            //查询用户类型，生成下拉框
+            $.ajax({
+                url: "../../roomtype/getAllRoomType",
+                type: "POST",
+                success: function (data) {
+                    console.log("请求成功");
+                    console.log(data.data);
+                    var str = "";
+                    for (var i = 0; i < data.data.length; i++) {
+                        console.log(data.data);
+                        str += "<option value='" + data.data[i].rid + "'>" + data.data[i].type;
+                    }
+                    var sel = "<select id='roomtype'>" + "<option value='0'>请选择房间类型</option>" + str + "</select>";
+                    console.log(sel);
+                    $("#p").html(sel);
+                },
+                error: function () {
+                    console.log("请求失败");
+                }
+            });
+
+            //为查询按钮添加事件,根据房间类型和身份证好查询订单
+            $("#sub").click(function () {
+                var roomType = $('#roomtype option:selected').val();
+                var idCard = $("#idcard").val();
+                console.log(roomType);
+                console.log(idCard);
+                if (idCard != null && idCard != "" && roomType != 0) {
+                    initTable('http://localhost:8080/hotel/bill/getBillByRoomAndIdCard?roomType=' + roomType + "&idCard=" + idCard, 1, 3);//调用函数，初始化表格
+                } else if (idCard != null && idCard != "") {
+                    initTable('http://localhost:8080/hotel/bill/getBillByRoomAndIdCard?idCard=' + idCard, 1, 3);//调用函数，初始化表格
+                } else if (roomType != 0) {
+                    initTable('http://localhost:8080/hotel/bill/getBillByRoomAndIdCard?roomType=' + roomType, 1, 3);//调用函数，初始化表格
+                } else {
+                    initTable('http://localhost:8080/hotel/bill/getBillByRoomAndIdCard', 1, 3);//调用函数，初始化表格
+
+                }
+
+            });
+        });
+
+        function initTable(url, pageNumber, pageSize) {
+            $('#page').bootstrapTable('destroy'); //先销毁表格
+            $('#page').bootstrapTable({
+                url: url,
+                method: 'get',
+                toolbar: "#toolbar",
+                striped: true, // 是否显示行间隔色 //search : "true",
+                sidePagination: "server",
+                pageNumber: pageNumber, //初始化加载第一页，默认第一页
+                pageList: [3, 5, 10, 15, 20],//可供选择的每页的行数
+                pageSize: pageSize,//初始默认每页行数
+                pagination: true,
+                showRefresh: false,//刷新
+                showPaginationSwitch: false,//是否隐藏分页条
+                showToggle: false, //是否显示详细视图和列表视图的切换按钮
+                // clickToSelect: true,点击选中
+                editable: true,
+                contentType: "application/x-www-form-urlencoded",
+                paginationPreText: "上一页",
+                paginationNextText: "下一页",
+                queryParamsType: "limit",//设置为 ‘limit’ 则会发送符合 RESTFul 格式的参数.
+                sortable: true, // 是否启用排序
+                // queryParams: queryParams, //queryParams为参数设置的函数
+                queryParams: function (params) {
+                    //           自定义参数，这里的参数是传给后台的，我这是是分页用的
+//            请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
+//　　　　　　queryParamsType = 'limit' ,返回参数必须包含limit, offset, search, sort, order
+//            queryParamsType = 'undefined', 返回参数必须包含: pageSize, pageNumber, searchText, sortName, sortOrder.
+//            返回false将会终止请求。
+                    return {//这里的params是table提供的
+                        pageNum: (params.offset / params.limit) + 1, //当前页面,默认是上面设置的1(pageNumber)
+                        pageSize: params.limit, //每一页的数据行数，默认是上面设置的5(pageSize)
+                        /* username: $("#searchString_id").val()*/ //这个就是搜索框中的内容，可以自动传到后台，搜索实现在xml中体现
+                    };
+                },
+                columns: [
+                    {
+                        checkbox: true
+                    }, {
+                        field: 'id',
+                        title: '编号'
+                    },
+                    {
+                        field: 'roomNumber',
+                        title: '房间号'
+                    },
+                    {
+                        field: 'roomtypestr',
+                        title: '房间类型'
+                    },
+                    {
+                        field: 'guestName',
+                        title: '客人姓名'
+                    },
+                    {
+                        field: 'phone',
+                        title: '客人手机号'
+                    },
+                    {
+                        field: 'checkintime',
+                        title: '入住时间'
+                    },
+                    {
+                        field: 'checkouttime',
+                        title: '退房时间'
+                    },
+                    {
+                        field: 'payAmount',
+                        title: '消费金额'
+                    },
+                    {
+                        field: 'billstatus',
+                        title: '是否结账',
+                        formatter: function (value, row, index) {
+                            return changebillstatus(value,row)
+                        }
+                    }],
+                onLoadSuccess: function () {  //加载成功时执行
+                    console.info("加载数据成功");
+
+                },
+                onLoadError: function () {  //加载失败时执行
+                    console.info("加载数据失败");
+                }
+            });
+        };
+
+        function exportExcel() {
+            window.open("../../bill/exportExcel")
+        }
+
+        function changebillstatus(value,row) {
+            if (value == 0) {
+                return "结账";
+            } else if (value == 1) {
+                return "<a href='javascript:void(0);' onclick='out("+row.roomNumber+")'>未结账</a>";
+            }
+        }
+
+        function out(obj) {
+        //  var tr= $($(this).parent().parent().children()[1]).length;
+            localStorage.setItem('billroomNumber', obj);
+            alert(obj);
+            window.location="out.html";
+        }
+
+    </script>
+</div>
+</div>
+</body>
+</html>

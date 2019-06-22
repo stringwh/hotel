@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>无标题文档</title>
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+
+    <script language="javascript">
+        $(document).ready(function(){
+            $("#chick").click(function(){
+                //jquery中循环的函数
+                $(".st").each(function(i,obj){
+                    //alert("循环第"+i+"次");
+                    obj.checked=true;
+                });
+
+
+            });
+
+        });
+
+    </script>
+
+</head>
+
+<body>
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="main.html">首页</a>
+        </li>
+        <li><a href="#">入住管理</a>
+        </li>
+        <li><a href="#">入住信息查询</a>
+        </li>
+    </ul>
+</div>
+<div class="formbody">
+    <div class="formtitle"><span>修改待清理状态</span></div>
+    <div id="usual1" class="usual">
+        <div id="tab1" class="tabson">
+
+            <ul class="forminfo">
+                <li>
+                    <label>房间编号<b>*</b></label>
+                    <div class="vocation">
+                        <input  readonly="readonly" type="text" name="roomNumber" id="roomNumber" class="dfinput"   placeholder="请填写房间号,如：3302" style="width:344px;"/>
+                        <br/>
+                        <br/>
+                    </div>
+                </li>
+                <li>
+                    <label>客房状态<b>*</b></label>
+                        <td>
+                            <select name="status" style="width:100px;" id="status"  >
+                                <option value="">请选择</option>
+                                <option value="1">可入住</option>
+                                <option value="2">已入住</option>
+                                <option value="3">待清理</option>
+                                <option value="4">停用</option>
+                            </select>
+                        </td>
+                </li>
+                <li>
+                    <label>&nbsp;</label>
+                    <input name="button" type="button" onclick="uproom()" class="btn" value="修改"/>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </div>
+<script>
+    window.onload = function () {
+        document.getElementById('roomNumber').value = localStorage.getItem('roomNumber');
+    }
+    function uproom() {
+        var roomNumber=$("#roomNumber").val();
+        var status = $("#status option:checked").val();
+        alert(roomNumber+"="+status);
+        $.ajax({
+            url:"../../room/updateStatus",
+            type: "POST",
+            data: {
+                roomNumber: roomNumber,
+                status: status
+            },
+            success: function (data, status) {
+                if (status == "success") {
+                    console.log('请求成功');
+                    console.log(data);
+                    if (data.state == 0) {
+                        window.location = "SelectRoomstatus.html";
+                    } else {
+                        alert("修改失败")
+                    }
+
+                }
+            }
+        })
+    }
+</script>
+</body>
+</html>

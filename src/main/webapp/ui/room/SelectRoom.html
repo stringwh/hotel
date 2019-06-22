@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>无标题文档</title>
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/font-awesome-4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" type="text/css"
+          href="../../bootstrap/frame/bootstrap-table-master/src/bootstrap-table.css">
+    <link rel="stylesheet" type="text/css"
+          href="../../bootstrap/frame/bootstrap3-editable-1.5.1/bootstrap3-editable/css/bootstrap-editable.css">
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap-fileinput-master/css/fileinput.css">
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap2/css/bootstrap.min.css">
+
+
+    <script src="../../bootstrap/frame/jquery/jquery-3.3.1.js"></script>
+    <script src="../../bootstrap/frame/layer/layer.js"></script>
+    <script src="../../bootstrap/frame/bootstrap-table-master/src/bootstrap-table.js"></script>
+    <script src="../../bootstrap/frame/bootstrap3-editable-1.5.1/bootstrap3-editable/js/bootstrap-editable.js"></script>
+    <script src="../../bootstrap/frame/bootstrap-table-master/src/locale/bootstrap-table-zh-CN.js"></script>
+    <script src="../../bootstrap/frame/bootstrap-table-master/dist/extensions/editable/bootstrap-table-editable.min.js"></script>
+    <script src="../../bootstrap/frame/bootstrap2/js/bootstrap.min.js"></script>
+
+    <style>
+        *{font-size:9pt;border:0;margin:0;padding:0;}
+        body{font-family:'微软雅黑'; margin:0 auto;min-width:980px;}
+        ul{display:block;margin:0;padding:0;list-style:none;}
+        li{display:block;margin:0;padding:0;list-style: none;}
+        .place{height:40px;background:url(../../images/righttop.gif) repeat-x;}
+        .place span{line-height:40px; font-weight:bold;float:left; margin-left:12px;color:#dc4e00;}
+        .placeul li{float:left; line-height:40px; padding-left:7px; padding-right:12px; background:url(../../images/rlist.gif) no-repeat right;}
+        .placeul li:last-child{background:none;}
+        .rightinfo{padding:8px;}
+        .tools{clear:both; height:35px; margin-bottom:8px;}
+        .toolbar{float:left;}
+        .toolbar li{background:url(../../images/toolbg.gif) repeat-x; line-height:33px; height:33px; border:solid 1px #dca571; float:left; padding-right:10px; margin-right:5px;border-radius: 3px; behavior:url(../../js/pie.htc); cursor:pointer;}
+        .toolbar li span{float:left; margin-left:2px; margin-right:5px; margin-top:5px;}
+        .toolbar1{float:right; margin-right:5px;border-radius: 3px;}
+        .toolbar1 table{ width:850px;}
+        .toolbar1 tr{border:solid 1px #dca571;border-radius: 3px;}
+        .toolbar1 tr input,select{ margin-left:10px; height:20px; border:solid 1px #d7a372;border-radius: 3px; font-family:"微软雅黑";}
+        .toolbar1 tr .button{width:60px;background:url(../../images/toolbg.gif) repeat-x; height:26px;border-radius: 3px;}
+        .toolbar1 tr .zi{background:url(../../images/toolbg.gif) repeat-x; line-height:33px; height:33px; text-align:center;}
+
+    </style>
+    <script>
+        //修改
+
+        //删除
+        function shanchu() {
+            window.location="SelectRoom.html";
+        }
+      /*  function  aaa() {
+            window.location="../../room/roomNTS"
+        }*/
+
+
+
+    </script>
+</head>
+
+<body>
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="main.html">首页</a>
+        </li>
+        <li><a href="#">入住管理</a>
+        </li>
+        <li><a href="#">入住信息查询</a>
+        </li>
+    </ul>
+</div>
+<div class="rightinfo">
+    <div class="tools">
+        <ul class="toolbar">
+            <li><span><img src="../../images/t01.png" /></span>
+                <a href="../../Roomtype1.s">添加</a>
+            </li>
+
+            <li >
+                <span><img src="../../images/t03.png" /> </span>
+                <a href="#" onclick="del()">删除</a>
+            </li>
+
+            <li><span><img src="../../images/ico06.png"></img></span>
+                <a href="SelectRoomtype.html">查询客房类型</a>
+            </li>
+
+            <li><span><img src="../../images/ico06.png"></img></span>
+                <a href="SelectRoomstatus.html?status=3">查询待清理房间</a>
+            </li>
+
+        </ul>
+
+        <div class="toolbar1">
+
+                <table>
+                    <tr>
+                        <td class="zi"><span>房间号：</span></td>
+                        <td><input type="text" name="roomNumber" id="roomNumber" value="" placeholder="请输入" /></td>
+                        <td class="zi"><span>房间类型：</span></td>
+
+                        <td>
+                            <p id="p1"> </p>
+                        </td>
+                        <script>
+                        //下拉列表
+                        $(function () {
+
+                            $.ajax({
+                                url: '../../roomtype/getAllRoomType',
+                                type: "post",
+                                data : {},
+                                success:function(data){
+                                    var option;
+                                    var headOption = "";
+                                    for (var i = 0; i < data.data.length; i++) {
+                                        headOption = headOption + "<option value='"+data.data[i].id+"'>"+data.data[i].type+"</option>";
+                                    }
+                                    option = '<select  name="roomtype" size="1" id="roomType" style="width:100px;"><option value="" onselect="onselect">请选择</option>'+
+                                        headOption + '</select>' ;
+
+                                    $("#p1").html(option);
+                                }
+                            })
+
+
+                        })
+
+                    </script>
+
+                        <td class="zi"><span>房间状态：</span></td>
+                        <td>
+                        <select name="status" style="width:100px;" id="status"  >
+                            <option value="">请选择</option>
+                            <option value="1">可入住</option>
+                            <option value="2">已入住</option>
+                            <option value="3">待清理</option>
+                            <option value="4">停用</option>
+                        </select>
+                        </td>
+                        <td><input type="button" class="button" value="查询" id="sub"/></td>
+                    </tr>
+                </table>
+
+        </div>
+    </div>
+
+
+
+    <table id="page"></table>
+            <script>
+                //为查询按钮添加事件,根据房间号，房间类型，房间状态查询房间
+                $("#sub").click(function () {
+                    alert(1211);
+                    var roomNumber=$("#roomNumber").val();
+                    var roomType=$('#roomType option:selected').val();
+                    var status=$("#status").val();
+                    alert(roomNumber+roomType+status);
+                    var url="http://localhost:8080/hotel/room/roomNTS?";
+                    if(roomNumber!=null&&roomNumber!=""&&roomType!=0&&status!=0){
+                        url=url+"roomNumber="+roomNumber+"&roomType="+roomType+"&status="+status;
+                    }else if(roomNumber!=null&&roomNumber!=""&&roomType!=0){
+                        url=url+"roomNumber="+roomNumber+"&roomType="+roomType;
+                    }else if(roomNumber!=null&&roomNumber!=""&&status!=0){
+                        url=url+"roomNumber="+roomNumber+"&status="+status;
+                    }else if(roomNumber!=null&&roomNumber!=""){
+                        url=url+"roomNumber="+roomNumber;
+                    }else if(roomType!=0){
+                        url=url+"roomType="+roomType;
+                    }else if(status!=0){
+                        url=url+"status="+status;
+
+                    }else {
+                        url=url;
+                    }
+                     initTable(url,1,3);
+                });
+                $(function () {
+
+                    initTable('../../room/getRoom',1,3);//调用函数，初始化表格
+                });
+
+                function initTable(url,pageNumber,pageSize) {
+                    $('#page').bootstrapTable('destroy'); //先销毁表格
+                    $('#page').bootstrapTable({
+                        url: url,
+                        method: 'get',
+                        toolbar: "#toolbar",
+                        striped: true, // 是否显示行间隔色 //search : "true",
+                        sidePagination: "server",
+                        pageNumber: pageNumber, //初始化加载第一页，默认第一页
+                        pageList: [3,5, 10, 20, 30],//可供选择的每页的行数
+                        pageSize: pageSize,//初始默认每页行数
+                        pagination: true,
+                        showRefresh: false,//刷新
+                        showPaginationSwitch: false,//是否隐藏分页条
+                        showToggle: false, //是否显示详细视图和列表视图的切换按钮
+                        // clickToSelect: true,点击选中
+                        editable: true,
+                        contentType: "application/x-www-form-urlencoded",
+                        paginationPreText: "上一页",
+                        paginationNextText: "下一页",
+                        queryParamsType: "limit",//设置为 ‘limit’ 则会发送符合 RESTFul 格式的参数.
+                        sortable: true, // 是否启用排序
+                        // queryParams: queryParams, //queryParams为参数设置的函数
+                        queryParams: function (params) {
+                            return {//这里的params是table提供的
+                                pageNum: (params.offset / params.limit) + 1, //当前页面,默认是上面设置的1(pageNumber)
+                                pageSize: params.limit, //每一页的数据行数，默认是上面设置的5(pageSize)
+                                /* username: $("#searchString_id").val()*/ //这个就是搜索框中的内容，可以自动传到后台，搜索实现在xml中体现
+                            };
+                        },
+                        columns: [
+                            {
+                                checkbox: true
+                            }, {
+                                field: 'roomNumber',
+                                title: '房间编号'
+                            },
+                            {
+                                field: 'price',
+                                title: '价格'
+                            },
+                            {
+                                field: 'roomTypestr.type',
+                                title: '房间类型'
+                            },
+                            {
+                                field: 'deposit',
+                                title: '押金'
+                             },
+                            {
+                                field: 'statusstr',
+                                title: '状态'
+                            },
+                            {
+                                field: '',
+                                title: '操作',
+                                align: 'center',
+                                events: operateEvents,//给按钮注册事件
+                                formatter: addFunctionAlty//表格中增加按钮
+                            }],
+                        onLoadSuccess: function () {  //加载成功时执行
+                            console.info("加载数据成功");
+                        },
+                        onLoadError: function () {  //加载失败时执行
+                            console.info("加载数据失败");
+                        }
+                    });
+                };
+
+                function addFunctionAlty(value, row, index) { //要进行的操作 操作函数
+                    // 修改按钮、删除按钮
+                    return [
+                        '<button type="button" id="btn_edit" class="btn btn-info" data-toggle="modal" data-target="#ModalInfo" >修改</button>',
+                        '<button id="btn_delete" class="btn btn-danger" onclick="shanchu()">删除</button>'
+                    ].join('');
+                }
+
+                window.operateEvents = {
+                                'click #btn_delete': function (e, value, row, index) {
+                                    //  alert(111);
+                                    /*var arrays = new Array();
+                                    arrays.push(row.id);
+                                    console.log(arrays[0]);*/
+                                    val=row.roomNumber;
+                                    $.ajax({
+                                        url: "../../room/delRoom",
+                                        type: "POST",
+                                        traditional: true,
+                                        data: {
+                                            'roomNumber':val
+                                        },
+
+                            success: function (data) {
+                                alert(222);
+                                console.log("删除成功");
+                                console.log(num);
+                                initTable(num,size);
+                                console.log(data);
+                            }
+                        })
+
+                    },
+                    'click #btn_edit': function (e, value, row, index) {
+                        //console.log(row.roomNumber + row.account + row.realName + row.password + row.sex + row.birthDate + row.idCard + row.phone + row.address);
+                        //中文传输:可以在页面a用encodeURI 编码url  在b页面用decodeURI解码url
+                        //可用encodeURI() 函数可把字符串作为 URI 进行编码。注：①encodeURI()需转2次，encodeURI(encodeURI(url))
+                        localStorage.setItem('roomNumber',row.roomNumber);
+                        window.location = "updateRoom.html";
+                    }
+                }
+                //根据房间号删除多项房间
+                function del() {
+                    confirm("确认删除？");
+                    var rows = $("#page").bootstrapTable('getSelections');
+                    console.log(rows.length);
+                    var rn = [];
+                    //遍历被选中的行
+                    for (var i = 0; i < rows.length; i++) {
+
+                        //将其tid组成一个数组。
+                        //1.0
+                        rn += rows[i].roomNumber + ",";
+                        //    2.0 id+=rows[i]['roomNumber']+','
+                        console.log('delAll的rn是' + rn);
+                    }
+                    $.ajax({
+                        url: "../../room/delAll",
+                        type: "POST",
+                        traditional: true,
+                        data: {
+                            rn: rn
+                        },
+
+                        success: function (data) {
+                            if (data.state == 0) {
+                                console.log("删除成功");
+                                initTable('../../room/getRoom', 1, 3);
+                            } else {
+                                alert("删除失败")
+                            }
+                        }
+                    })
+                }
+            </script>
+
+</div>
+
+</body>
+</html>

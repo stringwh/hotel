@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>无标题文档</title>
+
+
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/font-awesome-4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" type="text/css"
+          href="../../bootstrap/frame/bootstrap-table-master/src/bootstrap-table.css">
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap-fileinput-master/css/fileinput.css">
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap2/css/bootstrap.min.css">
+
+    <!-- <link href="../../css/style.css" rel="stylesheet" type="text/css" />-->
+    <script src="../../bootstrap/frame/jquery/jquery-3.3.1.js"></script>
+    <script src="../../bootstrap/frame/layer/layer.js"></script>
+    <script src="../../bootstrap/frame/bootstrap-table-master/src/bootstrap-table.js"></script>
+    <script src="../../bootstrap/frame/bootstrap-table-master/src/locale/bootstrap-table-zh-CN.js"></script>
+    <script src="../../bootstrap/frame/bootstrap2/js/bootstrap.min.js"></script>
+    <style>
+        * {
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: '微软雅黑';
+            margin: 0 auto;
+            min-width: 980px;
+        }
+
+        ul {
+            display: block;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        li {
+            display: block;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .place {
+            height: 40px;
+            background: url(../../images/righttop.gif) repeat-x;
+        }
+
+        .place span {
+            line-height: 40px;
+            font-weight: bold;
+            float: left;
+            margin-left: 12px;
+            color: #dc4e00;
+        }
+
+        .placeul li {
+            float: left;
+            line-height: 40px;
+            padding-left: 7px;
+            padding-right: 12px;
+            background: url(../../images/rlist.gif) no-repeat right;
+        }
+
+        .placeul li:last-child {
+            background: none;
+        }
+
+        .rightinfo {
+            padding: 8px;
+        }
+
+        .tools {
+            clear: both;
+            margin-bottom: 8px;
+        }
+
+        .toolbar1 table {
+            width: 850px;
+        }
+
+        .toolbar2 {
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+
+        .toolbar2 table {
+            width: 1300px;
+        }
+
+        .toolbar2 tr {
+            border: solid 1px #dca571;
+            border-radius: 3px;
+        }
+
+        .toolbar2 tr input, select {
+            margin-left: 10px;
+            height: 20px;
+            border: solid 1px #d7a372;
+            border-radius: 5px;
+            font-family: "微软雅黑";
+        }
+
+        .toolbar2 tr .button {
+            width: 60px;
+            background: url(../../images/toolbg.gif) repeat-x;
+            height: 26px;
+            border-radius: 3px;
+        }
+
+        .toolbar2 tr .zi {
+            background: url(../../images/toolbg.gif) repeat-x;
+            line-height: 33px;
+            height: 33px;
+            text-align: center;
+        }
+        .toolbar{float:left;}
+        .toolbar li{background:url(../../images/toolbg.gif) repeat-x; line-height:33px; height:33px; border:solid 1px #dca571; float:left; padding-right:10px; margin-right:5px;border-radius: 3px; behavior:url(js/pie.htc); cursor:pointer;}
+        .toolbar li span{float:left; margin-left:2px; margin-right:5px; margin-top:5px;}
+
+    </style>
+    <script type="text/javascript">
+
+        //encodeURI(encodeURI(row.account))
+
+        function getElementStr() {
+            alert(11);
+            var url = "http://localhost:8080/hotel/check/seltCheck?";
+            if ($("[name='guestname']").val() != "") {
+                url += "userName=" + $("[name='guestname']").val()+"&";
+            }
+            if ($("[name='roomnumber']").val() != "") {
+                url += "roomNumber=" +encodeURI(encodeURI($("[name='roomnumber']").val())) +"&";
+
+            }
+            if ($("[name='phone']").val() != "") {
+                url += "phone=" + $("[name='phone']").val()+"&";
+
+            }
+            if ($("[name='checkintime']").val() != "") {
+                url += "checkInTime=" + $("[name='checkintime']").val()+"&";
+
+            }
+            alert(url.substr(0,url.length-1));
+            initTable(url.substr(0,url.length-1), 1, 3);//调用函数，初始化表格
+
+        }
+
+    </script>
+    <script>
+        //删除
+        function shanchu() {
+            window.location="inroominfo.html";
+        }
+    </script>
+</head>
+
+<body>
+<div class="place"><span>位置：</span>
+    <ul class="placeul">
+        <li><a href="main.html">首页</a></li>
+        <li><a href="#">入住管理</a></li>
+        <li><a href="#">入住信息查询</a></li>
+    </ul>
+</div>
+<center>
+<div class="rightinfo">
+    <div class="tools">
+
+            <ul class="toolbar">
+
+                <li >
+                    <span><img src="../../images/t03.png" style="position: relative;top: -5px;"/> </span>
+                    <a href="#" onclick="del()">多项删除</a>
+                </li>
+            </ul>
+            <div class="toolbar2">
+
+                <table>
+                    <tr>
+                        <td class="zi"><span>房间号：</span></td>
+                        <td><input type="text" placeholder="房间号" name="roomnumber" /></td>
+                        <td class="zi"><span>姓名：</span></td>
+                        <td><input type="text" placeholder="姓名" name="guestname" /></td>
+                        <td class="zi"><span>电话：</span></td>
+                        <td><input type="text" placeholder="电话" name="phone" /></td>
+                        <td class="zi"><span>入住日期：</span></td>
+                        <td><input type="text" placeholder="入住日期" name="checkintime" id="Calendar"
+                        /></td>
+                        <td><input type="button" value="查询" class="button" onclick="getElementStr()"/></td>
+                    </tr>
+                </table>
+
+            </div>
+</center>
+    </div>
+
+    <br><br>
+
+    <table id="page"></table>
+    <script>
+        $(function () {
+            initTable('http://localhost:8080/hotel/check/getCheck', 1, 3);//调用函数，初始化表格
+
+        });
+
+        function initTable(url, pageNumber, pageSize) {
+            $('#page').bootstrapTable('destroy'); //先销毁表格
+            $('#page').bootstrapTable({
+                url: url,
+                method: 'get',
+                toolbar: "#toolbar",
+                striped: true, // 是否显示行间隔色 //search : "true",
+                sidePagination: "server",
+                pageNumber: pageNumber, //初始化加载第一页，默认第一页
+                pageList: [3, 5, 10, 15, 20],//可供选择的每页的行数
+                pageSize: pageSize,//初始默认每页行数
+                pagination: true,
+                showRefresh: false,//刷新
+                showPaginationSwitch: false,//是否隐藏分页条
+                showToggle: false, //是否显示详细视图和列表视图的切换按钮
+                // clickToSelect: true,点击选中
+                editable: true,
+                contentType: "application/x-www-form-urlencoded",
+                paginationPreText: "上一页",
+                paginationNextText: "下一页",
+                queryParamsType: "limit",//设置为 ‘limit’ 则会发送符合 RESTFul 格式的参数.
+                sortable: true, // 是否启用排序
+                // queryParams: queryParams, //queryParams为参数设置的函数
+                queryParams: function (params) {
+                    //           自定义参数，这里的参数是传给后台的，我这是是分页用的
+//            请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
+//　　　　　　queryParamsType = 'limit' ,返回参数必须包含limit, offset, search, sort, order
+//            queryParamsType = 'undefined', 返回参数必须包含: pageSize, pageNumber, searchText, sortName, sortOrder.
+//            返回false将会终止请求。
+                    return {//这里的params是table提供的
+                        pageNum: (params.offset / params.limit) + 1, //当前页面,默认是上面设置的1(pageNumber)
+                        pageSize: params.limit, //每一页的数据行数，默认是上面设置的5(pageSize)
+                        /* username: $("#searchString_id").val()*/ //这个就是搜索框中的内容，可以自动传到后台，搜索实现在xml中体现
+                    };
+                },
+                columns: [
+                    {
+                        checkbox: true
+                    }, {
+                        field: 'id',
+                        title: '编号',
+                    },
+                    {
+                        field: 'roomNumber',
+                        title: '房间号'
+                    },
+                    {
+                        field: 'userName',
+                        title: '客人姓名'
+                    },
+                    {
+                        field: 'idCard',
+                        title: '客人身份证'
+                    },
+                    {
+                        field: 'phone',
+                        title: '客人手机号'
+                    },
+
+                    {
+                        field: 'checkInTime',
+                        title: '入住时间'
+                    },
+                    {
+                        field: 'room.price',
+                        title: '房间单价'
+                    },
+                    {
+                        field: 'room.deposit',
+                        title: '房间押金'
+                    },
+                    {
+                        field: 'statusstr',
+                        title: '是否入住'
+                    } ,
+                    {
+                        field: '',
+                        title: '操作',
+                        align: 'center',
+                        events: operateEvents,//给按钮注册事件
+                        formatter: addFunctionAlty//表格中增加按钮
+                    }],
+                onLoadSuccess: function () {  //加载成功时执行
+                    console.info("加载数据成功");
+                },
+                onLoadError: function () {  //加载失败时执行
+                    console.info("加载数据失败");
+                }
+            });
+        };
+
+        function addFunctionAlty(value, row, index) { //要进行的操作 操作函数
+            // 修改按钮、删除按钮
+            return [
+                '<button id="btn_delete" class="btn btn-danger" onclick="shanchu()">删除</button>'
+            ].join('');
+        }
+
+        window.operateEvents = {
+            'click #btn_delete': function (e, value, row, index) {
+                alert(111);
+                val = row.roomNumber;
+                $.ajax({
+                    url: "../../check/delCheck",
+                    type: "POST",
+                    traditional: true,
+                    data: {
+                        'roomNumber': val
+                    },
+
+                    success: function (data) {
+                        alert(222);
+                        console.log("删除成功");
+                        console.log(num);
+                        initTable(num, size);
+                        console.log(data);
+                    }
+                })
+
+            },
+            'click #btn_edit': function (e, value, row, index) {
+                console.log(row.id + row.account + row.realName + row.password + row.sex + row.birthDate + row.idCard + row.phone + row.address);
+                //中文传输:可以在页面a用encodeURI 编码url  在b页面用decodeURI解码url
+                //可用encodeURI() 函数可把字符串作为 URI 进行编码。注：①encodeURI()需转2次，encodeURI(encodeURI(url))
+                localStorage.setItem('id', row.id);
+                localStorage.setItem('birthDate', row.birthDate);
+                localStorage.setItem('idCard', row.idCard);
+                window.location = "updateemplyee.html?id=" + row.id + "&account=" + encodeURI(encodeURI(row.account)) + "&realName=" + encodeURI(encodeURI(row.realName)) + "&password=" + encodeURI(encodeURI(row.password)) + "&sex=" + encodeURI(encodeURI(row.sex)) + "&birthDate=" + changeDateFormat(row.birthDate) + "&idCard=" + encodeURI(encodeURI(row.idCard)) + "&phone=" + row.phone + "&address=" + encodeURI(encodeURI(row.address));
+            }
+        } //根据房间号删除多项房间
+        function del() {
+            confirm("确认删除？");
+            var rows = $("#page").bootstrapTable('getSelections');
+            console.log(rows.length);
+            var rn = [];
+            //遍历被选中的行
+            for (var i = 0; i < rows.length; i++) {
+
+                //将其tid组成一个数组。
+                //1.0
+                rn += rows[i].roomNumber + ",";
+                //    2.0 id+=rows[i]['roomNumber']+','
+                console.log('delAll的rn是' + rn);
+            }
+            $.ajax({
+                url: "../../check/delAll",
+                type: "POST",
+                traditional: true,
+                data: {
+                    rn: rn
+                },
+
+                success: function (data) {
+                    if (data.state == 0) {
+                        console.log("删除成功");
+                        initTable('../../check/getCheck', 1, 3);
+                    } else {
+                        alert("删除失败")
+                    }
+                }
+            })
+        }
+    </script>
+</div>
+</body>
+</html>

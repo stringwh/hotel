@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>酒店管理系统主页</title>
+    <link rel="stylesheet" href="../../css/select.css" type="text/css"></link>
+    <link rel="stylesheet" href="../../css/style.css" type="text/css"></link>
+    <script type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>
+
+    <script type="text/javascript" >
+        $.ajaxSetup({
+            async:false
+        });
+        //返回值时，先定义全局变量，由ajax改变值，返回该全局变量
+        //下拉列表
+        $(function () {
+            $.ajax({
+                url: '../../roomtype/getRoomType',
+                type: "post",
+                data : {},
+                async : false,
+                success:function(data){
+                    //alert(data.data);
+                    var option;
+                    var headOption = "";
+                    for (var i = 0; i < data.data.length; i++) {
+                        headOption = headOption + "<option value='"+data.data[i].id+"'>"+data.data[i].type+"</option>";
+                    }
+                    option = '<select  class="dfinput"  name="roomtype"  id="select" style="opacity:1; width:200px; height:35px;">'+
+                        headOption + '</select>' ;
+
+                    $("#p1").html(option);
+                }
+            })
+
+
+        })
+
+    </script>
+
+    <script type="text/javascript">
+        function add() {
+            alert("进入add");
+            var roomNumber = $("#roomNumber").val();
+            var price = $("#price").val();
+            var roomType = $("#p1 option:checked").val();
+            var deposit = $("#deposit").val();
+            var status = $("#status option:checked").val();
+            alert(roomNumber + price + roomType + deposit + status);
+            $.ajax({
+                url: "../../room/insertRoom",
+                type: "POST",
+                data: {
+                    roomNumber: roomNumber,
+                    price: price,
+                    roomType: roomType,
+                    deposit: deposit,
+                    status: status
+                },
+                success: function (data, status) {
+                    if (status == "success") {
+                        console.log('请求成功');
+                        console.log(data);
+                        if (data.state == 0) {
+                            window.location = "SelectRoom.html";
+                        } else {
+                            alert("添加失败")
+                        }
+
+                    }
+                }
+            })
+        }
+        //下拉列表
+        $(function () {
+            $.ajax({
+                url: '../../roomtype/getAllRoomType',
+                type: "post",
+                data : {},
+                async : false,
+                success:function(data){
+                    //alert(data.data);
+                    var option;
+                    var headOption = "";
+                    for (var i = 0; i < data.data.length; i++) {
+                        headOption = headOption + "<option value='"+data.data[i].id+"'>"+data.data[i].type+"</option>";
+                    }
+                    option = '<select  class="dfinput"  name="roomtype"  id="select" style="opacity:1; width:200px; height:35px;">'+
+                        headOption + '</select>' ;
+
+                    $("#p1").html(option);
+                }
+            })
+
+
+        })
+    </script>
+
+</head>
+<body>
+<div class="place"> <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="main.html">首页</a></li>
+        <li><a href="#">客房信息管理</a></li>
+        <li><a href="#">添加客房</a></li>
+    </ul>
+</div>
+<div class="formbody">
+    <div class="formtitle"><span>添加房间</span></div>
+    <div id="usual1" class="usual">
+        <div id="tab1" class="tabson">
+
+
+            <ul class="forminfo">
+                <li>
+                    <label>客房编号<b>*</b></label>
+                    <div class="vocation">
+                        <input type="text" name="roomnumber" id="roomNumber" class="dfinput" placeholder="请填写房间号,如：3302"  style="width:344px;" />
+                    </div>
+                    <span id="roomNumberSpan"></span>
+                    <br/>
+                </li>
+
+                <li>
+                    <label>客房价格<b>*</b></label>
+                    <div class="vocation">
+                        <input type="text" name="price" id="price"   class="dfinput" placeholder="输入房间价格，如108元/天"  style="width:344px;"/>
+                    </div>
+                    <span id="priceSpan">&nbsp;</span>
+                </li>
+
+                <li>
+                    <label >客房类型<b>*</b></label>
+                    <div class="vocation" >
+                        <p id="p1"> </p>
+                    </div>
+                    <br/>
+                </li>
+
+                <li>
+                    <label>房间押金<b>*</b></label>
+                    <div class="vocation">
+                        <input type="text" name="deposit" id="deposit"  class="dfinput" placeholder="输入押金金额"  style="width:344px;" />
+                    </div>
+                    <span id="depositSpan">&nbsp;</span>
+                </li>
+
+                <li>
+                    <label >客房状态<b>*</b></label>
+                    <div class="vocation">
+                        <select style="opacity:1; width:200px; height:35px;"  class="dfinput" name="status" id="status"  >
+                            <option value="" >请选择</option>
+                            <option value="1">可入住</option>
+                            <option value="2">已入住</option>
+                            <option value="3">待清理</option>
+                            <option value="4">停用</option>
+                        </select>
+                    </div>
+                    <br/>
+                    <br/>
+                    <br/>
+                </li>
+
+                <li>
+                    <label>&nbsp;</label>
+                    <input name="button" type="button" onclick="add()" class="btn" value="添加"/>
+                </li>
+
+            </ul>
+
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

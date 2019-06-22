@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>结账退房</title>
+    <link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <link href="../../css/select.css" rel="stylesheet" type="text/css" />
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript">
+var val;
+var money=0; //扣除余额
+var paymoney=0; //消费金额
+        $(function(){
+            //$("#utils").click(function(){
+            $("#roomnumber").val(localStorage.getItem('roomNumber')) ;
+            $("#deposit").val(localStorage.getItem('yajin')) ;
+            $("#guestname").val(localStorage.getItem('name')) ;
+
+            $.ajax({
+               url:"../../check/checkoutroom",
+                type:"POST",
+                data:{
+                    roomNumber:localStorage.getItem('roomNumber'),
+                    userName:localStorage.getItem('name'),
+                    checkouttime:localStorage.getItem('checkouttime')
+                },
+                success:function (data) {
+                    alert(data.data);
+                    val=data;
+                    $("[name='rate']").val(data.data[1].vip.vipdiscount.discountRate);
+                    $("[name='payamount']").val(data.data[1].payAmount);
+                    $("[name='balance']").val(data.data[1].vip.balance);
+                    alert(data.data[1].room.deposit);
+                    paymoney=data.data[1].payAmount;
+                    if(data.data[1].room.deposit-data.data[1].payAmount>0){
+                        alert("押金大于消费金额");
+
+                        alert(paymoney);
+                        var  pay=data.data[1].room.deposit-data.data[1].payAmount;
+                        $("#payout").html("您一共消费"+data.data[1].payAmount+"元，您的押金有"+data.data[1].room.deposit+"元"+"<br>我们将找您"+pay+"元");
+                    }
+                    else  {
+                        pay=data.data[1].payAmount-data.data[1].room.deposit-data.data[1].vip.balance;
+                        if (pay>0){
+                            alert("押金+卡中余额小于消费金额");
+                            alert(data.data[1].vip.balance)
+                            money=data.data[1].vip.balance;
+                            alert(money);
+                            $("#payout").html("您一共消费"+data.data[1].payAmount+"元，您的押金有"+data.data[1].room.deposit+"元,会员卡余额"+data.data[1].vip.balance+"元,扣除余额后,"+"<br>您需要付款"+pay+"元");
+
+                        } else {
+                            alert("押金+卡中余额大于消费金额");
+                            money=data.data[1].payAmount-data.data[1].room.deposit;
+                            alert(money);
+                            pay=data.data[1].room.deposit+data.data[1].vip.balance-data.data[1].payAmount;
+                            $("#payout").html("您一共消费"+data.data[1].payAmount+"元，您的押金有"+data.data[1].room.deposit+"元,会员卡余额"+data.data[1].vip.balance+"元,扣除余额后,"+"<br>会员卡余额"+pay+"元");
+
+                        }
+                    }
+                }
+            });
+
+
+        });
+
+        //付款
+        function Payment() {
+            alert(1);
+            alert("money:"+money);
+            alert("paymoney:"+paymoney);
+            alert(val.data[1].idCard+val.data[1].checkintime);
+            $.ajax({
+                url: "../../bill/BillPayment",
+                type: "POST",
+                data:{
+                    roomNumber:localStorage.getItem('roomNumber'),
+                    userName:localStorage.getItem('name'),
+                    idCard:val.data[1].idCard,
+                    checkintime:val.data[1].checkintime,
+                    maney:money,
+                    paymoney:paymoney
+                },
+                success:function (data) {
+                    if (data.state==0) {
+                        window.location="billinfo.html";
+                    }else {
+                        alert("付款失败");
+                    }
+                }
+            })
+        }
+    </script>
+
+</head>
+
+<body>
+<div class="place"> <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">入住信息管理</a></li>
+        <li><a href="#">结账退房</a></li>
+    </ul>
+</div>
+<div class="formbody">
+    <div class="formtitle"><span>消费信息</span></div>
+    <div id="usual1" class="usual">
+        <div id="tab1" class="tabson">
+            <form action="billpayout.s" method="post" id="form0">
+                <ul class="forminfo">
+                    <li  style="margin-top:20px;">
+                        <label for="name" >房间号<b>*</b></label>
+                        <div class="vocation">
+                            <input name="roomnumber" id="roomnumber" readonly="readonly" type="text" class="dfinput"  style="width:344px;"/>
+                        </div>
+                    </li>
+                    <br />
+                    <li >
+                        <label for="guestname" style="cursor:pointer" >会员姓名<b>*</b></label>
+                        <div class="vocation">
+                            <input name="guestname" id="guestname" readonly="readonly"  class="dfinput" value="${bill.guestname }"  style="width:344px;"/>
+                        </div>
+                    </li> <br />
+                    <li>
+                        <label for="rate" style="cursor:pointer" >VIP折扣<b>*</b></label>
+                        <div class="vocation">
+                            <input name="rate"   readonly="readonly"  class="dfinput" style="width:344px;"/>
+                        </div>
+                    </li> <br /> <li>
+                    <label for="payamount" style="cursor:pointer" >消费金额<b>*</b></label>
+                    <div class="vocation">
+                        <input name="payamount"   readonly="readonly"  class="dfinput" style="width:344px;"/>
+                    </div>
+                </li> <br /> <li>
+                    <label for="deposit" style="cursor:pointer" >房间押金<b>*</b></label>
+                    <div class="vocation">
+                        <input name="deposit" id="deposit" readonly="readonly"  class="dfinput"   style="width:344px;"/>
+                    </div>
+                </li> <br /> <li>
+                    <label for="balance" style="cursor:pointer" >余额<b>*</b></label>
+                    <div class="vocation">
+                        <input name="balance"  readonly="readonly"  class="dfinput"   style="width:344px;"/>
+                    </div>
+                </li><br />
+                    <input type="hidden"  name="id" value="${bill.id}"/>
+                    <input type="hidden" name="vipid"  value=${vip.vipid } />
+                    <li>
+                        <div id="payout" style="color: red;font-size: 24px;"></div>
+                    </li>
+                    <input id="pay"   type="button" class="btn" value="付款" onclick="Payment()" />
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>

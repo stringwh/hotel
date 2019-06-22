@@ -1,0 +1,327 @@
+<!DOCTYPE html  >
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>无标题文档</title>
+
+	<link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap2/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="../../bootstrap/frame/font-awesome-4.7.0/css/font-awesome.min.css">
+
+	<link rel="stylesheet" type="text/css"
+		  href="../../bootstrap/frame/bootstrap-table-master/src/bootstrap-table.css">
+	<link rel="stylesheet" type="text/css"
+		  href="../../bootstrap/frame/bootstrap3-editable-1.5.1/bootstrap3-editable/css/bootstrap-editable.css">
+	<link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap-fileinput-master/css/fileinput.css">
+	<link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap2/css/bootstrap.min.css">
+
+
+	<script src="../../bootstrap/frame/jquery/jquery-3.3.1.js"></script>
+	<script src="../../bootstrap/frame/layer/layer.js"></script>
+	<script src="../../bootstrap/frame/bootstrap-table-master/src/bootstrap-table.js"></script>
+	<script src="../../bootstrap/frame/bootstrap3-editable-1.5.1/bootstrap3-editable/js/bootstrap-editable.js"></script>
+	<script src="../../bootstrap/frame/bootstrap-table-master/src/locale/bootstrap-table-zh-CN.js"></script>
+	<script src="../../bootstrap/frame/bootstrap-table-master/dist/extensions/editable/bootstrap-table-editable.min.js"></script>
+	<script src="../../bootstrap/frame/bootstrap2/js/bootstrap.min.js"></script>
+	<script type="text/javascript">
+        $(document).ready(function(){
+            $(".click").click(function(){
+                $(".tip").fadeIn(200);
+            });
+
+            $(".tiptop a").click(function(){
+                $(".tip").fadeOut(200);
+            });
+
+            $(".sure").click(function(){
+                $(".tip").fadeOut(100);
+            });
+
+            $(".cancel").click(function(){
+                $(".tip").fadeOut(100);
+            });
+
+        });
+	</script>
+
+	<style>
+		.place{height:40px;background:url(../../images/righttop.gif) repeat-x;}
+		.place span{line-height:40px; font-weight:bold;float:left; margin-left:12px;color:#dc4e00;}
+		.placeul li{float:left; line-height:40px; padding-left:7px; padding-right:12px; background:url(../../images/rlist.gif) no-repeat right;}
+		.placeul li:last-child{background:none;}
+		.rightinfo{padding:8px;}
+		.tools{clear:both; height:35px; margin-bottom:8px;}
+		.toolbar{float:left;}
+		.toolbar li{background:url(../../images/toolbg.gif) repeat-x; line-height:33px; height:33px; border:solid 1px #dca571; float:left; padding-right:10px; margin-right:5px;border-radius: 3px; behavior:url(js/pie.htc); cursor:pointer;}
+		.toolbar li span{float:left; margin-left:2px; margin-right:5px; margin-top:5px;}
+	</style>
+</head>
+<body>
+<div class="place"> <span>位置：</span>
+	<ul class="placeul">
+		<li><a href="main.html">首页</a></li>
+		<li><a href="#">会员管理</a></li>
+		<li><a href="#">会员信息管理</a></li>
+	</ul>
+</div>
+<div class="rightinfo">
+	<div class="tools">
+		<ul class="toolbar">
+			<li class="click"><span><img src="../../images/t01.png" /> </span><a
+					href="addvip.html">添加</a></li>
+
+			<li class="click" onclick="update()"
+			><span id="update"><img
+					src="../../images/t02.png" /></span>修改</li>
+
+			<li onclick="delAll()"><span><img
+					src="../../images/t03.png" /> </span>删除选中</li>
+		</ul>
+		<div class="toolbar1">
+			<table>
+				<form method="post" name="serch" action="conditionAllVip.s">
+					<tr>
+						<td class="zi"><span>选择分类：</span></td>
+						<td><select id="vipType" name="con">
+
+
+							<option value="vipId">会员卡号</option>
+
+
+
+							<option value="name">会员姓名</option>
+
+
+							<option value="phone">手机号码</option>
+
+
+							<option value="idCard">身份证号码</option>
+
+						</select></td>
+						<td class="zi"><span>关键字：</span></td>
+						<td><input type="text" name="key" id="key" placeholder="与分类关联"
+								   value="" />
+						</td>
+						<td><input type="button" value="查询" class="button" id="sub"/></td>
+					</tr>
+				</form>
+			</table>
+		</div>
+	</div>
+<!--<div id="toolbar" class="btn-group">
+	<button id="click" type="button" class="btn btn-warning">
+		<span class="glyphicon glyphicon-adjust" aria-hidden="true"></span>新增
+	</button>
+	<button id="remove" type="button" class="btn btn-danger">
+		<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>删除
+	</button>
+</div>-->
+<div>
+
+	<table id="page"></table>
+	<script>
+
+        $(function () {
+            initTable('http://localhost:8080/hotel/vip/getVip',1,3);//调用函数，初始化表格
+            /* $("#queryBtn").bind("click", initTable); //当点击查询按钮的时候执行,bootstrap-table前端分页是不能使用搜索功能*/
+            //$("#remove").on("click", remove);
+			$("#sub").click(function () {
+				var vipType=$('#vipType option:selected').val();
+				var key=$('#key').val();
+				console.log(vipType);
+				console.log(key);
+                if(key==null||key==""){
+                    alert("请输入key值");
+                }else if (key!=null){
+				    initTable('http://localhost:8080/hotel/vip/getVipbykey?vipType='+vipType+"&key="+encodeURI(key),1,3);
+				}
+            });
+        });
+
+
+
+        function initTable(url,pageNumber,pageSize) {
+            $('#page').bootstrapTable('destroy'); //先销毁表格
+            $('#page').bootstrapTable({
+                url: url,
+                method: 'get',
+                toolbar: "#toolbar",
+                striped: true, // 是否显示行间隔色 //search : "true",
+                sidePagination: "server",
+                pageNumber: pageNumber, //初始化加载第一页，默认第一页
+                pageList: [4, 8, 12, 16, 20],//可供选择的每页的行数
+                pageSize: pageSize,//初始默认每页行数
+                pagination: true,
+                showRefresh: false,//刷新
+                showPaginationSwitch: false,//是否隐藏分页条
+                showToggle: false, //是否显示详细视图和列表视图的切换按钮
+                // clickToSelect: true,点击选中
+                editable: true,
+                contentType: "application/x-www-form-urlencoded",
+                paginationPreText: "上一页",
+                paginationNextText: "下一页",
+                queryParamsType: "limit",//设置为 ‘limit’ 则会发送符合 RESTFul 格式的参数.
+                sortable: true, // 是否启用排序
+                // queryParams: queryParams, //queryParams为参数设置的函数
+                queryParams: function (params) {
+                    //           自定义参数，这里的参数是传给后台的，我这是是分页用的
+//            请求服务器数据时，你可以通过重写参数的方式添加一些额外的参数，例如 toolbar 中的参数 如果
+//　　　　　　queryParamsType = 'limit' ,返回参数必须包含limit, offset, search, sort, order
+//            queryParamsType = 'undefined', 返回参数必须包含: pageSize, pageNumber, searchText, sortName, sortOrder.
+//            返回false将会终止请求。
+                    return {//这里的params是table提供的
+                        pageNum: (params.offset / params.limit) + 1, //当前页面,默认是上面设置的1(pageNumber)
+                        pageSize: params.limit, //每一页的数据行数，默认是上面设置的5(pageSize)
+                        /* username: $("#searchString_id").val()*/ //这个就是搜索框中的内容，可以自动传到后台，搜索实现在xml中体现
+                    };
+                },
+                columns: [
+                    {
+                        checkbox: true
+                    }, {
+                        field: 'vipId',
+                        title: '编号'
+                    },
+                    {
+                        field: 'name',
+                        title: '名字'
+                    },
+                    {
+                        field: 'sex',
+                        title: '性别'
+                    },
+                    {
+                        field: 'idCard',
+                        title: '身份证'
+                    },
+                    {
+                        field: 'phone',
+                        title: '会员手机号'
+                    },
+                    {
+                        field: 'level',
+                        title: '会员等级'
+                    },
+                    {
+                        field: 'balance',
+                        title: '余额'
+                    },
+                    {
+                        field: 'addMonetary',
+                        title: '消费总额'
+                    },
+                    {
+                        field: '',
+                        title: '操作',
+                        align: 'center',
+                        events: operateEvents,//给按钮注册事件
+                        formatter: addFunctionAlty//表格中增加按钮
+                    }],
+                onLoadSuccess: function () {  //加载成功时执行
+                    console.info("加载数据成功");
+                },
+                onLoadError: function () {  //加载失败时执行
+                    console.info("加载数据失败");
+                }
+            });
+        };
+        function update(){
+            confirm("确认修改嘛？");
+            var row=$("#page").bootstrapTable('getSelections');
+            localStorage.setItem('vipId', row[0].vipId);
+            localStorage.setItem('name', row[0].name);
+            localStorage.setItem('idCard', row[0].idCard);
+            localStorage.setItem('phone',row[0].phone);
+            window.location = "updateVip.html";
+
+		}
+
+        function delAll(){
+            confirm("确认删除选中嘛？");
+			var rows = $("#page").bootstrapTable('getSelections');
+            console.log(rows.length);
+            var ids = [];
+            //遍历被选中的行
+            for (var i = 0; i < rows.length; i++) {
+
+                //将其tid组成一个数组。
+                //1.0
+                ids += rows[i].vipId + ",";
+                //    2.0 id+=rows[i]['vipId']+','
+                console.log('delAll的ids是' + ids);
+            }
+            $.ajax({
+                url: "../../vip/delAll",
+                type: "POST",
+                traditional: true,
+                data: {
+                    ids: ids
+                },
+
+                success: function (data) {
+                    if (data.state == 0) {
+                        console.log("删除成功");
+                        initTable('http://localhost:8080/hotel/vip/getVip', 1, 3);
+                    } else {
+                        alert("删除失败")
+                    }
+
+
+                }
+            })
+
+
+
+		}
+        function addFunctionAlty(value, row, index) { //要进行的操作 操作函数
+            // 修改按钮、删除按钮
+            return [
+                '<button type="button" id="btn_edit" class="btn btn-info" data-toggle="modal" data-target="#ModalInfo" ">修改</button>',
+                '<button id="btn_delete" class="btn btn-danger">删除</button>'
+            ].join('');
+        }
+
+
+        window.operateEvents = {
+            'click #btn_delete': function (e, value, row, index) {
+                /*var arrays = new Array();
+                arrays.push(row.id);*/
+                var value=row.vipId;
+                console.log(value);
+                $.ajax({
+                    url: "../../vip/delVip",
+                    type: "POST",
+                    traditional: true,
+                    data: {
+                        vipId: value
+                    },
+
+                    success: function (data) {
+                        alert("删除成功");
+                        console.log("删除成功");
+
+                        initTable('http://localhost:8080/hotel/vip/getVip',1,3);
+
+                    }
+                })
+
+            },
+            'click #btn_edit': function (e, value, row, index) {
+                console.log(row.vipId);
+                localStorage.setItem('vipId', row.vipId);
+                localStorage.setItem('name', row.name);
+                localStorage.setItem('idCard', row.idCard);
+                localStorage.setItem('phone',row.phone);
+                //中文传输:可以在页面a用encodeURI 编码url  在b页面用decodeURI解码url
+                //可用encodeURI() 函数可把字符串作为 URI 进行编码。注：①encodeURI()需转2次，encodeURI(encodeURI(url))
+                window.location = "updateVip.html?vipId=" + encodeURI(encodeURI(row.vipId)) + "&name=" + encodeURI(encodeURI(row.name)) + "&idCard=" + encodeURI(encodeURI(row.idCard))  + "&phone=" + encodeURI(encodeURI(row.phone));
+            }
+        }
+
+
+	</script>
+
+
+</div>
+
+</body>
+</html>
