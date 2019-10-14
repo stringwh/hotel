@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="css/style.css" rel="stylesheet" type="text/css"/>
+    <style>
+        .toolbar {
+            float: left;
+        }
+
+        .toolbar li {
+            background: url(../../images/toolbg.gif) repeat-x;
+            line-height: 33px;
+            height: 33px;
+            border: solid 1px #dca571;
+            float: left;
+            padding-right: 10px;
+            margin-right: 5px;
+            border-radius: 3px;
+            behavior: url(../../js/pie.htc);
+            cursor: pointer;
+        }
+
+        .toolbar li span {
+            float: left;
+            margin-left: 2px;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        .toolbar1 {
+            float: right;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+
+        .toolbar1 table {
+            width: 850px;
+        }
+
+        .toolbar1 tr {
+            border: solid 1px #dca571;
+            border-radius: 3px;
+        }
+
+        .toolbar1 tr input, select {
+            margin-left: 10px;
+            height: 20px;
+            border: solid 1px #d7a372;
+            border-radius: 3px;
+            font-family: "微软雅黑";
+        }
+
+        .toolbar1 tr .button {
+            width: 60px;
+            background: url(../../images/toolbg.gif) repeat-x;
+            height: 26px;
+            border-radius: 3px;
+        }
+
+        .toolbar1 tr .zi {
+            background: url(../../images/toolbg.gif) repeat-x;
+            line-height: 33px;
+            height: 33px;
+            text-align: center;
+        }
+
+        .rightinfo {
+            padding: 8px;
+        }
+
+        .tip {
+            width: 485px;
+            height: 260px;
+            position: absolute;
+            top: 10%;
+            left: 30%;
+            background: #fcfdfd;
+            box-shadow: 1px 8px 10px 1px #9b9b9b;
+            border-radius: 1px;
+            behavior: url(../../js/pie.htc);
+            display: none;
+            z-index: 111111;
+        }
+
+        .tiptop {
+            height: 40px;
+            line-height: 40px;
+            background: url(../../images/tcbg.gif) repeat-x;
+            cursor: pointer;
+        }
+
+        .tiptop span {
+            font-size: 14px;
+            font-weight: bold;
+            color: #fff;
+            float: left;
+            text-indent: 20px;
+        }
+
+        .tiptop a {
+            display: block;
+            background: url(../../images/close.png) no-repeat;
+            width: 22px;
+            height: 22px;
+            float: right;
+            margin-right: 7px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .tiptop a:hover {
+            background: url(../../images/close1.png) no-repeat;
+        }
+
+        .tipinfo {
+            padding-top: 30px;
+            margin-left: 65px;
+            height: 95px;
+        }
+
+        .tipinfo span {
+            width: 95px;
+            height: 95px;
+            float: left;
+        }
+
+        .tipright {
+            float: left;
+            padding-top: 15px;
+            padding-left: 10px;
+        }
+
+        .tipright p {
+            font-size: 14px;
+            font-weight: bold;
+            line-height: 35px;
+        }
+
+        .tipright cite {
+            color: #858686;
+        }
+
+        .tipbtn {
+            margin-top: 25px;
+            margin-left: 125px;
+        }
+
+        .sure, .cancel {
+            width: 96px;
+            height: 35px;
+            line-height: 35px;
+            color: #fff;
+            background: url(../../images/btnbg1.png) repeat-x;
+            font-size: 14px;
+            font-weight: bold;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .cancel {
+            background: url(../../images/btnbg2.png) repeat-x;
+            color: #000;
+            font-weight: normal;
+        }
+
+        * {
+            font-size: 9pt;
+            border: 0;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: '微软雅黑';
+            margin: 0 auto;
+            min-width: 980px;
+        }
+
+        ul {
+            display: block;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        li {
+            display: block;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .place {
+            height: 40px;
+            background: url(../../images/righttop.gif) repeat-x;
+        }
+
+        .place span {
+            line-height: 40px;
+            font-weight: bold;
+            float: left;
+            margin-left: 12px;
+            color: #dc4e00;
+        }
+
+        .placeul li {
+            float: left;
+            line-height: 40px;
+            padding-left: 7px;
+            padding-right: 12px;
+            background: url(../../images/rlist.gif) no-repeat right;
+        }
+
+        .placeul li:last-child {
+            background: none;
+        }
+
+        .rightinfo {
+            padding: 8px;
+        }
+
+        .tools {
+            clear: both;
+            height: 35px;
+            margin-bottom: 8px;
+        }
+
+        .toolbar {
+            float: left;
+        }
+
+        .toolbar li {
+            background: url(../../images/toolbg.gif) repeat-x;
+            line-height: 33px;
+            height: 33px;
+            border: solid 1px #dca571;
+            float: left;
+            padding-right: 10px;
+            margin-right: 5px;
+            border-radius: 3px;
+            behavior: url(../../js/pie.htc);
+            cursor: pointer;
+        }
+
+        .toolbar li span {
+            float: left;
+            margin-left: 2px;
+            margin-right: 5px;
+            margin-top: 5px;
+        }
+
+        .toolbar1 {
+            float: right;
+            margin-right: 5px;
+            border-radius: 3px;
+        }
+
+        .toolbar1 table {
+            width: 850px;
+        }
+
+        .toolbar1 tr {
+            border: solid 1px #dca571;
+            border-radius: 3px;
+        }
+
+        .toolbar1 tr input, select {
+            margin-left: 10px;
+            height: 20px;
+            border: solid 1px #d7a372;
+            border-radius: 3px;
+            font-family: "微软雅黑";
+        }
+
+        .toolbar1 tr .button {
+            width: 60px;
+            background: url(../../images/toolbg.gif) repeat-x;
+            height: 26px;
+            border-radius: 3px;
+        }
+
+        .toolbar1 tr .zi {
+            background: url(../../images/toolbg.gif) repeat-x;
+            line-height: 33px;
+            height: 33px;
+            text-align: center;
+        }
+
+    </style>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <script type="text/javascript" src="js/jquery.js"></script>
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css"
+          href="../../bootstrap/frame/bootstrap-table-master/src/bootstrap-table.css">
+    <link rel="stylesheet" type="text/css"
+          href="../../bootstrap/frame/bootstrap3-editable-1.5.1/bootstrap3-editable/css/bootstrap-editable.css">
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap-fileinput-master/css/fileinput.css">
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap2/css/bootstrap.min.css">
+    <script src="../../bootstrap/frame/jquery/jquery-3.3.1.js"></script>
+    <script src="../../bootstrap/frame/layer/layer.js"></script>
+    <script src="../../bootstrap/frame/bootstrap-table-master/src/bootstrap-table.js"></script>
+    <script src="../../bootstrap/frame/bootstrap3-editable-1.5.1/bootstrap3-editable/js/bootstrap-editable.js"></script>
+    <script src="../../bootstrap/frame/bootstrap-table-master/src/locale/bootstrap-table-zh-CN.js"></script>
+    <script src="../../bootstrap/frame/bootstrap-table-master/dist/extensions/editable/bootstrap-table-editable.min.js"></script>
+    <script src="../../bootstrap/frame/bootstrap2/js/bootstrap.min.js"></script>
+    <script type="text/javascript">
+
+    </script>
+</head>
+
+<body>
+<div class="place"><span>位置：</span>
+    <ul class="placeul">
+        <li><a href="main.html">首页</a></li>
+        <li><a href="#">员工管理</a></li>
+        <li><a href="#">员工信息</a></li>
+        <li><a href="#">管理员：${account}</a></li>
+    </ul>
+</div>
+<div class="rightinfo">
+    <div class="tools">
+        <ul class="toolbar">
+            <li class="click"><span><img src="../../images/t01.png"/></span><a
+                    href="addemplyee.html">添加</a></li>
+            </li>
+            <li class="click"><span><img src="../../images/t03.png"/></span><a href="#" onclick="delM()">多项删除</a></li>
+        </ul>
+    </div>
+</div>
+<div class="toolbar1">
+    <form method="post" name="serch" id="form3 ">
+        <table>
+            <tr>
+                <td><input type="text" name="account" placeholder="请填写员工账号" id="account"/></td>
+                <td><input type="text" name="realname" placeholder="请输入员工姓名" id="realname"/></td>
+                <td>
+                    <select name="sex" id="sex">
+                        <option>性别</option>
+                        <option value="男">男</option>
+                        <option value="女">女</option>
+                    </select>
+                </td>
+                <td><input type="text" name="phone" placeholder="请输入员工手机号码" id="phone"/></td>
+                <td><input type="text" name="address" placeholder="请输入员工地址" id="address"/></td>
+                <td><input type="button" value="查询" id="sele" class="button"/></td>
+            </tr>
+        </table>
+    </form>
+</div>
+<script>
+
+</script>
+<script type="text/javascript">
+    $('.tablelist tbody tr:odd').addClass('odd');
+</script>
+<table id="page"></table>
+<script>
+    var num;
+    var size;
+    $(function () {
+        initTable('../../emplyee/getEmplyee', 1, 3);//调用函数，初始化表格
+    });
+    $("#sele").click(function () {
+        var account = $('#account').val();
+        var realName = $('#realname').val();
+        var sex = $("select option:checked").val();
+        var phone = $('#phone').val();
+        var address = $('#address').val();
+        alert(account + realName + sex + phone + address);
+        var url = "http://localhost:8080/hotel/emplyee/getemplyeeBysome?"
+        if (account != "") {
+            url = url + "account=" + account + "&"
+        }
+        if (realName != "") {
+            url = url + "realName=" + realName + "&"
+        }
+        if (sex == "男" || sex == "女") {
+            url = url + "sex=" + sex + "&"
+        } else {
+            url = url
+        }
+        if (phone != "") {
+            url = url + "phone=" + phone + "&"
+        }
+        if (address != "") {
+            url = url + "address=" + address + "&"
+
+        }
+        initTable(url, 1, 3);
+
+    })
+
+    function initTable(url, pageNumber, pageSize) {
+        $('#page').bootstrapTable('destroy'); //先销毁表格
+        $('#page').bootstrapTable({
+            url: url,
+            method: 'get',
+            toolbar: "#toolbar",
+            striped: true, // 是否显示行间隔色 //search : "true",
+            sidePagination: "server",
+            pageNumber: pageNumber, //初始化加载第一页，默认第一页
+            pageList: [3, 5, 10, 20, 30, 40],//可供选择的每页的行数
+            pageSize: pageSize,//初始默认每页行数
+            pagination: true,
+            showRefresh: false,//刷新
+            showPaginationSwitch: false,//是否隐藏分页条
+            showToggle: false, //是否显示详细视图和列表视图的切换按钮
+            // clickToSelect: true,点击选中
+            editable: true,
+            contentType: "application/x-www-form-urlencoded",
+            paginationPreText: "上一页",
+            paginationNextText: "下一页",
+            queryParamsType: "limit",//设置为 ‘limit’ 则会发送符合 RESTFul 格式的参数.
+            sortable: true, // 是否启用排序
+            // queryParams: queryParams, //queryParams为参数设置的函数
+            queryParams: function (params) {
+                num = (params.offset / params.limit) + 1;
+                size = params.limit;
+                return {//这里的params是table提供的
+                    pageNum: (params.offset / params.limit) + 1, //当前页面,默认是上面设置的1(pageNumber)
+                    pageSize: params.limit, //每一页的数据行数，默认是上面设置的5(pageSize)
+                    /* username: $("#searchString_id").val()*/ //这个就是搜索框中的内容，可以自动传到后台，搜索实现在xml中体现
+                };
+            },
+            columns: [
+                {
+                    checkbox: true,
+                    field: 'checkbox1',
+                    name: 'checkbox'
+
+                }, {
+                    field: 'account',
+                    title: '员工账号'
+                },
+                {
+                    field: 'id',
+                    title: '自编号'
+                },
+                {
+                    field: 'realName',
+                    title: '真实姓名'
+                },
+                {
+                    field: 'password',
+                    title: '登陆密码'
+                },
+                {
+                    field: 'sex',
+                    title: '性别'
+                },
+                {
+                    field: 'birthDate',
+                    title: '出生日期',
+                    formatter: function (value, row, index) {
+                        return changeDateFormat(value)
+                    }
+
+                },
+                {
+                    field: 'idCard',
+                    title: '身份证号'
+                },
+                {
+                    field: 'phone',
+                    title: '电话号'
+                },
+                {
+                    field: 'address',
+                    title: '地址'
+                },
+                {
+                    field: 'typestr',
+                    title: '员工类型'
+                },
+                {
+                    field: '',
+                    title: '操作',
+                    align: 'center',
+                    events: operateEvents,//给按钮注册事件
+                    formatter: addFunctionAlty//表格中增加按钮
+                }],
+            onLoadSuccess: function () {  //加载成功时执行
+                console.info("加载数据成功");
+            },
+            onLoadError: function () {  //加载失败时执行
+                console.info("加载数据失败");
+            }
+        });
+    };
+    function addFunctionAlty(value, row, index) { //要进行的操作 操作函数
+        // 修改按钮、删除按钮
+        var strcookie = document.cookie;//获取cookie字符串
+        var arrcookie = strcookie.split(";");//分割
+        console.log(arrcookie);
+        //遍历匹配
+        var str = "";
+        for (var i = 0; i < arrcookie.length; i++) {
+            var arr = arrcookie[i].split("=");
+            console.log(arr);
+           // alert(arr[0]);
+            //alert(arr[1]);
+            if (arr[0].replace(/^\s+|\s+$/g, '')=="cookie_type") { //cookie_type
+               // alert(arr[1]);
+                if (arr[1] == 2) {
+                    console.log("普通用户");
+                    str += "普通用户";
+                    //alert(str);
+                    /*   $("#add").hide();
+                       $("#del").hide();
+                       $("#li").text(str);*/
+                    //alert(arr[1]);
+                    return [
+                        '<button type="button" id="btn_edit" class="btn btn-info" data-toggle="modal" data-target="#ModalInfo">修改</button>'
+                    ].join('');
+                } else if (arr[1] == 1) {
+                    console.log("管理员");
+                    str += "管理员";
+                    $("#li").text(str);
+                    return [
+                        '<button type="button" id="btn_edit" class="btn btn-info" data-toggle="modal" data-target="#ModalInfo">修改</button>&emsp;&emsp;',
+                        '<button id="btn_delete" class="btn btn-danger">删除</button>'
+                    ].join('');
+                }
+            }
+
+        }
+    }
+
+    function delM() {
+        //获取当前被选中的行
+        alert("进入delm")
+        var rows = $("#page").bootstrapTable('getSelections');
+        console.log(rows.length);
+        var ids = [];
+        //遍历被选中的行
+        for (var i = 0; i < rows.length; i++) {
+
+            //将其tid组成一个数组。
+            //1.0
+            ids += rows[i].id + ",";
+            //    2.0 id+=rows[i]['tid']+','
+            console.log('delM的ids是' + ids);
+        }
+        $.ajax({
+            url: "../../emplyee/delM",
+            type: "POST",
+            traditional: true,
+            data: {
+                ids: ids
+            },
+
+            success: function (data) {
+                if (data.state == 0) {
+                    console.log("删除成功");
+                    console.log(num);
+                    initTable('../../emplyee/getEmplyee', num, size);
+                } else {
+                    alert("删除失败")
+                }
+
+
+            }
+        })
+
+    }
+
+
+
+
+    window.operateEvents = {
+        'click #btn_delete': function (e, value, row, index) {
+            var arrays = new Array();
+            arrays.push(row.id);
+            console.log(arrays[0]);
+            $.ajax({
+                url: "../../emplyee/del",
+                type: "POST",
+                traditional: true,
+                data: {
+                    ids: arrays
+                },
+
+                success: function (data) {
+                    if (data.state == 0) {
+                        console.log("删除成功");
+                        console.log(num);
+                        initTable('../../emplyee/getEmplyee', num, size);
+                    } else {
+                        alert("删除失败")
+                    }
+
+
+                }
+            })
+
+        },
+        'click #btn_edit': function (e, value, row, index) {
+            console.log(row.id + row.account + row.realName + row.password + row.sex + row.birthDate + row.idCard + row.phone + row.address);
+            //中文传输:可以在页面a用encodeURI 编码url  在b页面用decodeURI解码url
+            //可用encodeURI() 函数可把字符串作为 URI 进行编码。注：①encodeURI()需转2次，encodeURI(encodeURI(url))
+            localStorage.setItem('id', row.id);
+            localStorage.setItem('birthDate', row.birthDate);
+            localStorage.setItem('idCard', row.idCard);
+            window.location = "updateemplyee.html?id=" + row.id + "&account=" + encodeURI(encodeURI(row.account)) + "&realName=" + encodeURI(encodeURI(row.realName)) + "&password=" + encodeURI(encodeURI(row.password)) + "&sex=" + encodeURI(encodeURI(row.sex)) + "&birthDate=" + changeDateFormat(row.birthDate) + "&idCard=" + encodeURI(encodeURI(row.idCard)) + "&phone=" + row.phone + "&address=" + encodeURI(encodeURI(row.address));
+        }
+    }
+
+    function changeDateFormat(cellval) {
+        var dateVal = cellval + "";
+        if (cellval != null) {
+            var date = new Date(parseInt(dateVal.replace("/Date(", "").replace(")/", ""), 10));
+            var month = date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1;
+            var currentDate = date.getDate() < 10 ? "0" + date.getDate() : date.getDate();
+         //   var hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours();
+          //  var minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes();
+          //  var seconds = date.getSeconds() < 10 ? "0" + date.getSeconds() : date.getSeconds();
+            return date.getFullYear() + "-" + month + "-" + currentDate;// + " " + hours + ":" + minutes + ":" + seconds;
+        }
+    }
+</script>
+</body>
+</html>

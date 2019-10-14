@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎登录后台管理系统</title>
+    <link href="../css/style.css" rel="stylesheet" type="text/css" />
+    <script language="JavaScript" src="../js/jquery-2.1.4.min.js"></script>
+    <script src="../js/cloud.js" type="text/javascript"></script>
+    <script language="javascript">
+        $(function(){
+
+
+
+            $('.loginbox').css({'position':'absolute','left':($(window).width()-692)/2});
+            $(window).resize(function(){
+                $('.loginbox').css({'position':'absolute','left':($(window).width()-692)/2});
+            });
+
+            $('#button').on('click', function () {
+
+                var account = $("#account").val();
+                var password = $("#password").val();
+                var auto=$("#checkbox").prop("checked");
+                console.log(account);
+                console.log(password);
+                console.log(auto);
+                if (account == null||account=="") {
+                    $("#usertxt").show();
+                }else if (password == null||password=="") {
+                    $('#pwdtxt').show();
+                }else  {
+                   $.ajax({
+                      url:"../emplyee/login" ,
+                       type:"POST",
+                       data:{
+                          "account":account,
+                           "password":password,
+                           "auto":auto
+                       },
+                       success:function (data,status) {
+                           if (status == "success") {
+                               console.log('请求成功');
+                               console.log(data);
+                               if (data.state==0) {
+                                   window.location="index.html";
+                               }else {
+                                   alert("账号密码错误")
+                               }
+
+                           }
+                       },
+                       error: function () {
+                           console.log('请求失败');
+                       }
+                   });
+                }
+            })
+
+            $("#find").click(function () {
+                $("#login1").hide();
+                $("#login2").show();
+            });
+            $("#check").click(function () {
+                alert(1);
+                var account=$("#account2").val();
+                var phone=$("#phone").val();
+                $.ajax({
+                    url:"../emplyee/check" ,
+                    type:"POST",
+                    data:{
+                        "account":account,
+                        "phone":phone
+                    },
+                    success:function (data,status) {
+                        alert(data);
+                        if (status == "success") {
+                            console.log('请求成功');
+                            console.log(data);
+                            if (data.state==0) {
+                                console.log("验证成功")
+                                $("#login1").hide();
+                                $("#login2").hide();
+                                $("#login3").show();
+                                $("#p").html("<input type='hidden' value='"+ account+"' id='hid1'>"+"<input type='hidden' value='"+ phone+"'  id='hid2'>");
+                            }else {
+                                alert("验证失败，账号和手机号不匹配")
+                            }
+                        }
+                    },
+                    error: function () {
+                        console.log('请求失败');
+                    }
+                });
+            });
+
+            $("#sub").click(function () {
+                var pwd1=$("#pwd1").val();
+                var pwd2=$("#pwd2").val();
+                console.log(pwd1);
+                if (pwd1!=pwd2) {
+                    alert("两次密码不一致");
+                }else{
+                    var account=$("#hid1").val();
+                    var phone=$("#hid2").val();
+
+                    console.log(account+"==="+phone+"==="+pwd1)
+                    $.ajax({
+                        url:"../emplyee/upEmplyeePwd" ,
+                        type:"POST",
+                        data:{
+                            "account":account,
+                            "phone":phone,
+                            "password":pwd1
+                        },
+                        success:function (data,status) {
+                            if (status == "success") {
+                                console.log('请求成功');
+                                console.log(data);
+                                if (data.state==0) {
+                                    console.log("修改成功");
+                                    $("#account").val(account);
+                                    $("#login1").show();
+                                    $("#login2").hide();
+                                    $("#login3").hide();
+                                }else {
+                                    alert("修改失败")
+                                }
+                            }
+                        },
+                        error: function () {
+                            console.log('请求失败');
+                        }
+                    });
+                }
+            });
+
+            $("#back").click(function () {
+                $("#login1").show();
+                $("#login2").hide();
+                $("#login3").hide();
+            })
+            $("#back1").click(function () {
+                $("#login1").show();
+                $("#login2").hide();
+                $("#login3").hide();
+            })
+        });
+    </script>
+</head>
+<body style="background-color:#df7611; background-image:url(../images/light.png); background-repeat:no-repeat; background-position:center top; overflow:hidden;">
+
+<div id="mainBody">
+    <div id="cloud1" class="cloud"></div>
+    <div id="cloud2" class="cloud"></div>
+</div>
+<div class="logintop">
+    <span>欢迎登录天下酒店客房管理界面平台</span>
+</div>
+
+<div class="loginbody"  id="login1">
+
+    <span class="systemlogo"></span>
+    <form id="form1" name="form1" method="post" action="emplyee/login">
+
+        <div class="loginbox" style="background-image: url('../images/logininfo2.png')">
+            <ul>
+                <li>
+                    <input  type="text" class="loginuser"  name="account" id="account"/>
+                </li>
+                <li>
+                    <input  type="password" class="loginpwd"  name="password" id="password"/>
+                </li>
+                <li>
+                    <input  type="button" class="loginbtn" value="登录"  name="button" id="button" />
+                    <label>
+                        <input name="" type="checkbox" value=""  id="checkbox"/>记住密码
+
+                    </label>
+                    <label>
+                        <a href="#" id="find">忘记密码？</a>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+    </form>
+</div>
+
+<div class="loginbody" id="login2" style="display: none;">
+
+    <span class="systemlogo"></span>
+
+
+    <div class="loginbox" style="background-image: url('../images/findpwd2.png')">
+        <br>
+        <ul>
+            <br>
+
+            <li>
+                <input  type="text" class="loginuser"  name="account" placeholder="账号" id="account2"/>
+            </li>
+            <li>
+                <input  type="password" class="loginuser"  name="phone" placeholder="手机号" id="phone" />
+            </li>
+            <li>
+                <input  type="button" class="loginbtn" value="验证"  name="button"  id="check"/>&emsp;&emsp;
+                <input  type="button" class="loginbtn" value="返回登陆"  name="button"  id="back"/>
+            </li>
+        </ul>
+    </div>
+
+
+</div>
+
+<div class="loginbody" id="login3" style="display: none;">
+    <p id="p"></p>
+    <span class="systemlogo"></span>
+
+
+    <div class="loginbox" style="background-image: url('../images/findpwd3.png')">
+        <br>
+        <ul>
+            <br>
+
+            <li>
+                <input  type="text" class="loginpwd"  name="pwd1" placeholder="密码" id="pwd1"/>
+            </li>
+            <li>
+                <input  type="password" class="loginpwd"  name="pwd2" placeholder="确认密码" id="pwd2" />
+            </li>
+            <li>
+                <input  type="button" class="loginbtn" value="重置密码"  name="button"  id="sub"/>&emsp;&emsp;
+                <input  type="button" class="loginbtn" value="返回登陆"  name="button"  id="back1"/>
+            </li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>

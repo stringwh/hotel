@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>无标题文档</title>
+    <!--<link href="../../css/style.css" rel="stylesheet" type="text/css" />
+    <script language="javascript" type="text/javascript" src="../../js/jquery-1.8.3.min.js"></script>-->
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap2/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/font-awesome-4.7.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" type="text/css"
+          href="../../bootstrap/frame/bootstrap-table-master/src/bootstrap-table.css">
+    <link rel="stylesheet" type="text/css"
+          href="../../bootstrap/frame/bootstrap3-editable-1.5.1/bootstrap3-editable/css/bootstrap-editable.css">
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap-fileinput-master/css/fileinput.css">
+    <link rel="stylesheet" type="text/css" href="../../bootstrap/frame/bootstrap2/css/bootstrap.min.css">
+
+
+    <script src="../../bootstrap/frame/jquery/jquery-3.3.1.js"></script>
+    <script src="../../bootstrap/frame/layer/layer.js"></script>
+    <script src="../../bootstrap/frame/bootstrap-table-master/src/bootstrap-table.js"></script>
+    <script src="../../bootstrap/frame/bootstrap3-editable-1.5.1/bootstrap3-editable/js/bootstrap-editable.js"></script>
+    <script src="../../bootstrap/frame/bootstrap-table-master/src/locale/bootstrap-table-zh-CN.js"></script>
+    <script src="../../bootstrap/frame/bootstrap-table-master/dist/extensions/editable/bootstrap-table-editable.min.js"></script>
+    <script src="../../bootstrap/frame/bootstrap2/js/bootstrap.min.js"></script>
+    <style>
+        *{font-size:9pt;border:0;margin:0;padding:0;}
+        body{font-family:'微软雅黑'; margin:0 auto;min-width:980px;}
+        ul{display:block;margin:0;padding:0;list-style:none;}
+        li{display:block;margin:0;padding:0;list-style: none;}
+        .place{height:40px;background:url(../../images/righttop.gif) repeat-x;}
+        .place span{line-height:40px; font-weight:bold;float:left; margin-left:12px;color:#dc4e00;}
+        .placeul li{float:left; line-height:40px; padding-left:7px; padding-right:12px; background:url(../../images/rlist.gif) no-repeat right;}
+        .placeul li:last-child{background:none;}
+        .rightinfo{padding:8px;}
+        .tools{clear:both; height:35px; margin-bottom:8px;}
+        .toolbar{float:left;}
+        .toolbar li{background:url(../../images/toolbg.gif) repeat-x; line-height:33px; height:33px; border:solid 1px #dca571; float:left; padding-right:10px; margin-right:5px;border-radius: 3px; behavior:url(js/pie.htc); cursor:pointer;}
+        .toolbar li span{float:left; margin-left:2px; margin-right:5px; margin-top:5px;}
+    </style>
+    <script language="javascript">
+        $(document).ready(function(){
+            $("#chick").click(function(){
+                $(".st").each(function(i,obj){
+                    if( obj.checked){
+                        obj.checked=false;
+                    }else{
+                        obj.checked=true;
+                    }
+
+                });
+
+
+            });
+
+        });
+
+    </script>
+
+</head>
+
+<body>
+<div class="place">
+    <span>位置：</span>
+    <ul class="placeul">
+        <li><a href="main.html">首页</a>
+        </li>
+        <li><a href="#">入住管理</a>
+        </li>
+        <li><a href="#">入住信息查询</a>
+        </li>
+    </ul>
+</div>
+<div class="rightinfo">
+    <!--<div class="tools">
+        <ul class="toolbar">
+
+            <li><span><img src="../../images/t02.png"></img></span>
+                <a onclick="document.getElementById('form1').submit();" href="javascript:;">修改待清理状态</a>
+            </li>
+
+        </ul>
+
+    </div>-->
+
+
+
+        <table class="tablelist">
+            <!--<thead>
+            <tr>
+                <th>
+                    <input class="st"  id="chick" type="checkbox" name="checkbox"/><samp>全选/全不选</samp>
+                </th>
+                <th>房间编号</th>
+                <th>状态</th>
+            </tr>
+            </thead>-->
+            <tbody>
+            <table id="page"></table>
+            <script>
+                $(function () {
+                    initTable(1,3);//调用函数，初始化表格
+                });
+
+                function initTable(pageNumber,pageSize) {
+                    $('#page').bootstrapTable('destroy'); //先销毁表格
+                    $('#page').bootstrapTable({
+                        url: '../../room/getRoomstatus',
+                        method: 'get',
+                        toolbar: "#toolbar",
+                        striped: true, // 是否显示行间隔色 //search : "true",
+                        sidePagination: "server",
+                        pageNumber: pageNumber, //初始化加载第一页，默认第一页
+                        pageList: [3,5, 10, 20, 30],//可供选择的每页的行数
+                        pageSize: pageSize,//初始默认每页行数
+                        pagination: true,
+                        showRefresh: false,//刷新
+                        showPaginationSwitch: false,//是否隐藏分页条
+                        showToggle: false, //是否显示详细视图和列表视图的切换按钮
+                        // clickToSelect: true,点击选中
+                        editable: true,
+                        contentType: "application/x-www-form-urlencoded",
+                        paginationPreText: "上一页",
+                        paginationNextText: "下一页",
+                        queryParamsType: "limit",//设置为 ‘limit’ 则会发送符合 RESTFul 格式的参数.
+                        sortable: true, // 是否启用排序
+                        // queryParams: queryParams, //queryParams为参数设置的函数
+                        queryParams: function (params) {
+                            return {//这里的params是table提供的
+                                pageNum: (params.offset / params.limit) + 1, //当前页面,默认是上面设置的1(pageNumber)
+                                pageSize: params.limit, //每一页的数据行数，默认是上面设置的5(pageSize)
+                                /* username: $("#searchString_id").val()*/ //这个就是搜索框中的内容，可以自动传到后台，搜索实现在xml中体现
+                            };
+                        },
+                        columns: [
+                            {
+                                checkbox: true
+                            },{
+                                field: 'roomNumber',
+                                title: '房间编号'
+                            },
+                            {
+                                field: 'statusstr',
+                                title: '状态'
+                            },
+                            {
+                                field: '',
+                                title: '操作',
+                                align: 'center',
+                                events: operateEvents,//给按钮注册事件
+                                formatter: addFunctionAlty//表格中增加按钮
+                            }],
+                        onLoadSuccess: function () {  //加载成功时执行
+                            console.info("加载数据成功");
+                        },
+                        onLoadError: function () {  //加载失败时执行
+                            console.info("加载数据失败");
+                        }
+                    });
+                };
+
+                function addFunctionAlty(value, row, index) { //要进行的操作 操作函数
+                    // 修改按钮
+                    return [
+                        '<button type="button" id="btn_edit" class="btn btn-info" data-toggle="modal" data-target="#ModalInfo" >修改</button>',
+                        /*'<button id="btn_delete" class="btn btn-danger" onclick="shanchu()">删除</button>'*/
+                    ].join('');
+                }
+
+                window.operateEvents = {
+                    'click #btn_edit': function (e, value, row, index) {
+                        localStorage.setItem('roomNumber',row.roomNumber);
+                        window.location = "updateRoomstatus.html";
+                    }
+                }
+
+            </script>
+
+            </tbody>
+
+        </table>
+</div>
+
+</body>
+</html>

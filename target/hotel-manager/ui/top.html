@@ -1,0 +1,104 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>酒店客房管理系统头部</title>
+<link href="../css/style.css" rel="stylesheet" type="text/css" />
+<script language="JavaScript" src="../js/jquery-2.1.4.min.js"></script>
+<script type="text/javascript">
+$(function(){	
+	//顶部导航切换
+	$(".nav li a").click(function(){
+		$(".nav li a.selected").removeClass("selected")
+		$(this).addClass("selected");
+	})
+
+    //获取用户
+    var strcookie = document.cookie;//获取cookie字符串
+    var arrcookie = strcookie.split("; ");//分割
+    console.log(arrcookie);
+//遍历匹配
+    for (var i = 0; i < arrcookie.length ; i++) {
+        var arr = arrcookie[i].split("=");
+        console.log(arr);
+        if (arr[0] == "cookie_account"){
+            console.log("当前用户："+arr[1]);
+            $("#userspan").text("当前用户："+arr[1]);
+        }
+    }
+
+})
+
+//获取系统时间
+function current(){ 
+    var d=new Date(),str=''; 
+    str +=d.getFullYear()+'年'; //获取当前年份 
+    str +=d.getMonth()+1+'月'; //获取当前月份（0——11） 
+    str +=d.getDate()+'日'; 
+    str +=d.getHours()+'时'; 
+    str +=d.getMinutes()+'分'; 
+    //str +=d.getSeconds()+'秒'; 
+    return str;
+} 
+setInterval(function(){
+    $("#systime").html(current)
+},100);
+
+
+function loginout() {
+  $.ajax({
+    url:"../emplyee/logout",
+    type:"POST",
+    success:function (data) {
+      if (data.state==0) {
+        /*
+        *
+1. target=_blank表示在新窗口中打开该链接；
+2. target=_self表示相同框架，即在当前窗口（或当前选项卡）中打开该链接。
+还有两个不常用的：
+3. target=_parent，将链接的文件载入含有该链接框架的父框架集或父窗口中。如果含有该链接的框架不是嵌套的，则在浏览器全屏窗口中载入链接的文件，就象_self参数一样。
+4. target=_top，在当前的整个浏览器窗口中打开所链接的文档，因而会删除所有框架不写的话就是表示默认值，默认值一般跟浏览器有关。
+        **/
+        console.log("注销成功");
+
+        //  window.location="login.html";
+        parent.location='login.html';
+      }
+    }
+  })
+}
+</script>
+</head>
+
+<body style="background:url(../images/topbg.gif) repeat-x;">
+<div class="topleft"> <a href="#"><img src="../images/logo1.png" title="系统首页" /></a> </div>
+<ul class="nav">
+  <li><a href="../getRoomWithType.s"target="rightFrame"><img src="../images/icon09.png" title="客人入住" />
+    <h2>客人入住</h2>
+    </a></li>
+    <li><a href="bill/billinfo.html"  target="rightFrame"><img src="../images/icon02.png" title="添加订单" />
+    <h2>查看订单</h2>
+    </a></li>
+    <li><a href="../ShowPage11.s"  target="rightFrame"><img src="../images/icon13.png" title="会员信息" style="width:45px; height:45px;"/>
+    <h2>会员信息</h2>
+    </a></li>
+    <li><a href="../roompage.s"  target="rightFrame"><img src="../images/ICO-066.png" title="客房信息"/>
+    <h2>客房信息</h2>
+    </a></li>
+    <li><a href="emplyee/emplyeeinfo.html"  target="rightFrame"><img src="../images/icon06.png" title="用户管理" />
+    <h2>员工管理</h2>
+    </a></li>
+</ul>
+<div class="systime">
+  <span id="systime"></span>
+</div>
+<div class="topright">
+  <ul>
+    <li><a href="javascript:void(0);" target="_parent" onclick="loginout()" >注销</a></li>
+    <li><a href="javascript:void(0);" target="_parent" onclick="loginout()">退出</a></li>
+  </ul>
+    <div class="user"> <span id="userspan"></span> </div>
+</div>
+</body>
+</html>
+

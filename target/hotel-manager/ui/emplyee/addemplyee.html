@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <title>无标题文档</title>
+    <link href="../../css/style.css" rel="stylesheet" type="text/css"/>
+    <link href="../../css/select.css" rel="stylesheet" type="text/css"/>
+    <script type="text/javascript" src="../../js/jquery.js"></script>
+    <script type="text/javascript" src="../../js/jquery.idTabs.min.js"></script>
+    <script type="text/javascript" src="../../js/select-ui.min.js"></script>
+    <script type="text/javascript" src="../../js/laydate/laydate.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function (e) {
+            $(".select1").uedSelect({
+                width: 345
+            });
+            $(".select2").uedSelect({
+                width: 167
+            });
+            $(".select3").uedSelect({
+                width: 100
+            });
+            //判断自编号
+            $("#id").blur(function () {
+                $(this).css("background-color", "#FFF")
+                var text = $(this).val();
+                var phone = /^\d{1,4}$/;
+                if (phone.test(text) == false) {
+                    $("#eid").html("输入有误").css("color", "red");
+                    return false;
+                } else {
+                    $("#eid").html("");
+                    return true;
+                }
+            });
+
+
+            //判断真实姓名
+            $("#realname").blur(function () {
+                $(this).css("background-color", "#FFF")
+                var text = $(this).val();
+                if (text == "") {
+                    $("#real").text("请填写用户名").css("color", "red");
+                    return false;
+                } else {
+                    $("#real").text("");
+                    return true;
+                }
+            });
+
+            //判断登陆密码
+            $("#upwd").blur(function () {
+                $(this).css("background-color", "#FFF")
+                var text = $(this).val();
+                var phone = /^\d{6,10}$/;
+                if (phone.test(text) == false) {
+                    $("#pd").html("输入有误").css("color", "red");
+                    return false;
+                } else {
+                    $("#pd").html("");
+                    return true;
+                }
+            });
+
+
+            //判断身份证号
+            $("#icd").blur(function () {
+                $(this).css("background-color", "#FFF")
+                var text = $(this).val();
+                var card = /^[1-9]{1}[0-9]{16}([0-9]|[xX])$/;
+
+                if (card.test(text) == false) {
+                    $("#card").html("输入有误").css("color", "red");
+                    return false
+                } else {
+                    $.post("../../emplyee/checkidcard", {"idcard": text},
+                        function (data, status) {
+                        // window.location.reload(true);
+                        if (data.state== 1) {
+                            $("#card").html("用户已存在").css("color", "red");
+                        } else {
+                            $("#birthdate").val(data.message);
+                            $("#card").html("用户可以").css("color", "green");
+                            return true;
+                        }
+                    });
+
+                }
+            });
+
+            //判断手机号
+
+            $("#tel").blur(function () {
+                $(this).css("background-color", "#FFF")
+                var text = $(this).val();
+                var phone = /^[1]{1}\d{10}$/;
+                if (phone.test(text) == false) {
+                    $("#phone").html("输入有误").css("color", "red");
+                    return false;
+                } else {
+                    $("#phone").html("");
+                    return true;
+                }
+            });
+
+
+            //判断地址
+           $("#addres").blur(function () {
+                $(this).css("background-color", "#FFF")
+                var text = $(this).val();
+                if (text == "") {
+                    $("#ads").text("请填写地址").css("color", "red");
+                    return false;
+                } else {
+                    $("#ads").text("");
+                    return true;
+                }
+            })
+        });
+
+        //判断出生日期
+        function checkdate() {
+            var text = $("#birthdate").val();
+            var date = /^\d{4}(\-|\/|\.)\d{1,2}\1\d{1,2}$/;
+            if (date.test(text) == false) {
+                $("#bdate").html("输入有误").css("color", "red");
+                return false;
+            } else {
+                $("#bdate").html("");
+                return true;
+            }
+        }
+        //判断员工账号
+
+        function checkaccount() {
+            var boo1=1;
+            //var flag=false;
+            var text = $("#account").val();
+
+            if (text == "") {
+
+                $("#acc").text("请填写账户名称").css("color", "red");
+
+                return false;
+            } else {
+                $.ajaxSettings.async = false;
+                $.post("../../emplyee/checkaccount", {"account": text},
+                    function (data,status) {
+                    if (data.state== 1) {
+                        $("#acc").text("该账号已存在").css("color", "red");
+                        boo1= false;
+                    }else{
+                        $("#acc").text("账号可用").css("color", "green");
+                        boo1= true;
+                    }
+                });
+                $.ajaxSettings.async = true;
+                return boo1;
+            }
+        }
+
+        //判断登陆密码1
+        function checkpassword() {
+            var text = $("#upwd").val();
+            var phone = /^\d{6,10}$/;
+            if (phone.test(text) == false) {
+                $("#pd").html("输入有误").css("color", "red");
+                return false;
+            } else {
+                $("#pd").html("");
+                return true;
+            }
+        }
+
+    </script>
+</head>
+
+<body>
+<div class="place"><span>位置：</span>
+    <ul class="placeul">
+        <li><a href="#">首页</a></li>
+        <li><a href="#">员工信息管理</a></li>
+        <li><a href="#">添加员工信息</a></li>
+    </ul>
+</div>
+<div class="formbody">
+    <div class="formtitle"><span>员工添加</span></div>
+    <form id="form1" name="form1" method="post">
+        <div id="usual1" class="usual">
+            <div id="tab1" class="tabson">
+                <ul class="forminfo">
+                    <li>
+                        <label>员工账号<b>*</b></label>
+                        <div class="vocation">
+                            <input name="account" type="text" id="account" onblur="checkaccount()" class="dfinput"
+                                   placeholder="请填写员工账号" style="width:344px;"/>
+                        </div>
+                        <span id="acc"></span>
+                    </li>
+                    <br/>
+
+                    <li style="margin-top:20px;">
+                        <label for="name">员工真实姓名<b>*</b></label>
+                        <div class="vocation">
+                            <input name="realName" id="realname" type="text" class="dfinput" placeholder="请输入员工姓名"
+                                   style="width:344px;"/>
+                        </div>
+                        <span id="real"></span>
+                    </li>
+                    <br/>
+                    <br/>
+                    <li style="margin-top:20px;">
+                        <label for="name">员工登陆密码<b>*</b></label>
+                        <div class="vocation">
+                            <input name="password" id="upwd" onblur="checkpassword()" type="text" class="dfinput"
+                                   placeholder="请输入员工登陆密码" style="width:344px;"/>
+                        </div>
+                        <span id="pd"></span>
+                    </li>
+                    <br/>
+                    <li>
+                        <label for="sex">性别<b>*</b></label>
+                        <input name="sex" type="radio" value="男" checked="checked"/>
+                        男&nbsp;&nbsp;&nbsp;&nbsp;
+                        <input name="sex" type="radio" value="女"/>
+                        女
+                    </li>
+                    <br/>
+                    <li style="margin-top:10px;">
+                        <label for="name">员工出生日期<b>*</b></label>
+                        <div class="vocation">
+                            <input name="birthDate" id="birthdate" onblur="checkdate()" type="text" class="dfinput"
+                                   placeholder="请输入员工出生日期" style="width:344px;"/>
+                        </div>
+                        <span id="bdate"></span>
+                    </li>
+                    <br/>
+
+                    <li>
+                        <label for="name">员工身份证号<b>*</b></label>
+                        <div class="vocation">
+                            <input name="idCard" id="icd" type="text" class="dfinput" placeholder="请输入员工身份证号码"
+                                   style="width:344px;"/>
+                        </div>
+                        <span id="card"></span>
+                    </li>
+                    <br/>
+                    <li>
+                        <label for="name">员工手机号码<b>*</b></label>
+                        <div class="vocation">
+                            <input name="phone" id="tel" type="text" class="dfinput" placeholder="请输入员工手机号码"
+                                   style="width:344px;"/>
+                        </div>
+                        <span id="phone"></span>
+                    </li>
+                    <br/>
+                    <li>
+                        <label for="name">员工地址<b>*</b></label>
+                        <div class="vocation">
+                            <input name="address" id="address" type="text" class="dfinput" placeholder="请输入员工地址"
+                                   style="width:344px;"/>
+                        </div>
+                        <span id="ads"></span>
+                    </li>
+                    <br/>
+                    <li>
+                        <label for="name">员工类型</label>
+                        <div class="vocation" style="border: none">
+                            <!--   <input name="" type="text" class="dfinput" value="请填写单位名称"  style="width:518px;"/>-->
+                            <select class="select1" name="type">
+                                <option value="1">经理</option>
+                                <option value="2">普通员工</option>
+                            </select>
+                        </div>
+                    </li>
+                    <br/>
+
+                    <br/>
+                    <li>
+                        <label>&nbsp;</label>
+                        <input onclick="add()" type="button" id="submit" class="btn" value="添加员工">
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </form>
+    <script type="text/javascript">
+
+        $("#usual1 ul").idTabs();
+    </script>
+    <script type="text/javascript">
+        $('.tablelist tbody tr:odd').addClass('odd');
+
+        !function () {
+            laydate.skin('qianhuang');
+            laydate({elem: '#Calendar'});
+            laydate.skin('qianhuang');
+            laydate({elem: '#Calendar2'});
+        }();
+
+
+        function add() {
+            if (checkdate() && checkpassword() && checkaccount()) {
+                var account = $("#account").val();
+                var realName = $("#realname").val();
+                var password = $("#upwd").val();
+                var sex = $("input[type='radio']:checked").val();
+                var birthDate = $("#birthdate").val();
+                var idCard = $("#icd").val();
+                var phone = $("#tel").val();
+                var address = $("#address").val();
+                var type = $("select option:checked").val();
+               // alert(account + realName + password + sex + birthDate + idCard + phone + address + type);
+                $.ajax({
+                    url: "../../emplyee/add",
+                    type: "POST",
+                    data: {
+                        account: account,
+                        realName: realName,
+                        password: password,
+                        sex: sex,
+                        birthDate: birthDate,
+                        idCard: idCard,
+                        phone: phone,
+                        address: address,
+                        type: type
+                    },
+                    success: function (data, status) {
+                        if (status == "success") {
+                            console.log('请求成功');
+                            console.log(data);
+                            if (data.state == 0) {
+                                window.location = "../emplyee/emplyeeinfo.html";
+                            } else {
+                                alert("添加失败")
+                            }
+
+                        }
+                    },
+                    error: function () {
+                        console.log('请求失败');
+                    }
+                });
+            } else {
+                alert("信息不完整，请将信息填写完整！");
+                return false;
+            }
+
+        }
+    </script>
+</div>
+</body>
+</html>
