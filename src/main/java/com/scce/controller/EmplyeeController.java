@@ -58,8 +58,9 @@ public class EmplyeeController {
     public JsonResult login(String account, String password, Boolean auto, HttpServletRequest request, HttpServletResponse response, HttpSession session) throws Exception {
         System.out.println("进入login方法");
         System.out.println(account+"==="+password+"==="+auto);
-        Emplyee emplyee = emplyeeService.login(account,password);
+        Emplyee  emplyee = emplyeeService.login(account,password);
         System.out.println(emplyee);
+        System.out.println("======="+emplyee.getAccount());
         if (emplyee != null) { //登陆成功，将用户名和用户类型存入cookie
             //对用户名进行编码（cookie不能存储中文）
             String account_code = URLEncoder.encode(account, "UTF-8");
