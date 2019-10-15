@@ -54,7 +54,7 @@ public class BillController {
         System.out.println(pageNum + "=======" + pageSize);
         PageInfo<Bill> pageInfo = billService.getBill(pageNum, pageSize);
         System.out.println(pageInfo.getList());
-        return new JsonResult(0, pageInfo.getList(), pageInfo.getTotal());
+        return new JsonResult(0, pageInfo.getList(), pageInfo.getTotal() );
     }
 
     @RequestMapping("/getBillNumByRoomType")
